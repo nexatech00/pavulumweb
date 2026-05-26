@@ -197,8 +197,9 @@ export default function AdminEssaysPage() {
       <ConfirmDialog
         open={!!deleteId}
         title="Delete essay?"
-        description="This will permanently remove the essay from the site."
+        message="This will permanently remove the essay from the site."
         confirmLabel="Delete"
+        destructive
         onConfirm={() => deleteId && del.mutate(deleteId)}
         onCancel={() => setDeleteId(null)}
       />

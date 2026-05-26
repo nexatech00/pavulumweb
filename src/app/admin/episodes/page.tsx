@@ -224,8 +224,9 @@ export default function AdminEpisodesPage() {
       <ConfirmDialog
         open={!!deleteId}
         title="Delete episode?"
-        description="This will permanently remove the episode from the site."
+        message="This will permanently remove the episode from the site."
         confirmLabel="Delete"
+        destructive
         onConfirm={() => deleteId && del.mutate(deleteId)}
         onCancel={() => setDeleteId(null)}
       />
