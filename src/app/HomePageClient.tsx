@@ -25,6 +25,16 @@ type Episode = {
   title: string;
   description: string;
   duration: string;
+  spotifyUrl?: string | null;
+  appleUrl?: string | null;
+  youtubeUrl?: string | null;
+};
+
+type Essay = {
+  id: string;
+  title: string;
+  excerpt: string;
+  readTime: string;
 };
 
 function useLatestEpisode() {
@@ -32,6 +42,17 @@ function useLatestEpisode() {
     queryKey: ["episodes"],
     queryFn: async () => {
       const res = await fetch("/api/episodes");
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+}
+
+function useLatestEssays() {
+  return useQuery<Essay[]>({
+    queryKey: ["essays"],
+    queryFn: async () => {
+      const res = await fetch("/api/essays");
       if (!res.ok) return [];
       return res.json();
     },
@@ -66,10 +87,12 @@ const stats = [
 export function HomePageClient() {
   const { data: books = [] } = useProductsByCategory("books");
   const { data: episodesData = [] } = useLatestEpisode();
+  const { data: essaysData = [] } = useLatestEssays();
   const { toast } = useToast();
 
   const featuredBooks = books.filter((b) => !b.comingSoon).slice(0, 3);
   const latestEpisode = episodesData[0];
+  const featuredEssays = essaysData.slice(0, 3);
 
   return (
     <SiteLayout>
@@ -234,29 +257,43 @@ export function HomePageClient() {
               <>
                 <p className="mt-6 text-xs uppercase tracking-wider text-soft-gold/70">Latest episode</p>
                 <p className="mt-1 font-serif text-xl text-cream">{latestEpisode.title}</p>
-                <p className="mt-2 text-sm text-cream/60">{latestEpisode.description}</p>
+                <p className="mt-2 text-sm text-cream/60 line-clamp-2">{latestEpisode.description}</p>
                 <div className="mt-4 flex items-center gap-4 rounded-full bg-white/10 px-4 py-3">
-                  <button className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-terracotta text-cream hover:bg-terracotta-dark" aria-label="Play">
+                  {/* Link to first available platform, or insights page */}
+                  <a
+                    href={latestEpisode.spotifyUrl ?? latestEpisode.youtubeUrl ?? latestEpisode.appleUrl ?? "/insights"}
+                    target={latestEpisode.spotifyUrl ?? latestEpisode.youtubeUrl ?? latestEpisode.appleUrl ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-terracotta text-cream hover:bg-terracotta-dark transition-colors"
+                    aria-label={`Play ${latestEpisode.title}`}
+                  >
                     <Play className="h-4 w-4" fill="currentColor" />
-                  </button>
+                  </a>
                   <div className="flex-1">
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
-                      <div className="h-full w-1/3 rounded-full bg-soft-gold" />
+                      <div className="h-full w-0 rounded-full bg-soft-gold" />
                     </div>
                   </div>
                   <span className="text-xs text-cream/50">{latestEpisode.duration}</span>
                 </div>
+                {/* Platform links from DB */}
+                {(latestEpisode.spotifyUrl || latestEpisode.appleUrl || latestEpisode.youtubeUrl) && (
+                  <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs text-soft-gold">
+                    {latestEpisode.spotifyUrl && (
+                      <a href={latestEpisode.spotifyUrl} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Spotify →</a>
+                    )}
+                    {latestEpisode.appleUrl && (
+                      <a href={latestEpisode.appleUrl} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Apple Podcasts →</a>
+                    )}
+                    {latestEpisode.youtubeUrl && (
+                      <a href={latestEpisode.youtubeUrl} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">YouTube →</a>
+                    )}
+                  </div>
+                )}
               </>
             ) : (
               <p className="mt-4 font-serif text-xl text-cream/60 italic">Episodes coming soon</p>
             )}
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-soft-gold">
-              <a href="#" className="hover:text-cream transition-colors">Spotify</a>
-              <span className="text-white/20">·</span>
-              <a href="#" className="hover:text-cream transition-colors">Apple Podcasts</a>
-              <span className="text-white/20">·</span>
-              <a href="#" className="hover:text-cream transition-colors">YouTube</a>
-            </div>
             <div className="mt-8">
               <Link href="/insights" className="inline-flex items-center gap-2 rounded-full border border-cream/30 px-6 py-2.5 text-sm text-cream hover:bg-white/10 transition-colors">
                 All episodes &amp; insights <ArrowRight className="h-4 w-4" />
@@ -309,16 +346,31 @@ export function HomePageClient() {
               and the art of paying attention. Published when they're ready — not on a schedule.
             </p>
             <div className="mt-8 space-y-4">
-              {[
-                "On the difference between listening and waiting to speak",
-                "Why 'good enough' parenting is actually the goal",
-                "The slow relationship: a case for less urgency",
-              ].map((title) => (
-                <div key={title} className="flex items-start gap-3 rounded-xl border border-border bg-card/60 px-5 py-4">
-                  <Feather className="mt-0.5 h-4 w-4 shrink-0 text-soft-gold" />
-                  <p className="text-sm text-charcoal/80 italic">{title}</p>
-                </div>
-              ))}
+              {featuredEssays.length > 0 ? (
+                featuredEssays.map((essay) => (
+                  <div key={essay.id} className="flex items-start gap-3 rounded-xl border border-border bg-card/60 px-5 py-4">
+                    <Feather className="mt-0.5 h-4 w-4 shrink-0 text-soft-gold" />
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-charcoal/90 italic">{essay.title}</p>
+                      {essay.readTime && (
+                        <p className="mt-0.5 text-xs text-charcoal/45">{essay.readTime}</p>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                // Fallback placeholder titles when no essays in DB yet
+                [
+                  "On the difference between listening and waiting to speak",
+                  "Why 'good enough' parenting is actually the goal",
+                  "The slow relationship: a case for less urgency",
+                ].map((title) => (
+                  <div key={title} className="flex items-start gap-3 rounded-xl border border-border bg-card/60 px-5 py-4">
+                    <Feather className="mt-0.5 h-4 w-4 shrink-0 text-soft-gold" />
+                    <p className="text-sm text-charcoal/80 italic">{title}</p>
+                  </div>
+                ))
+              )}
             </div>
             <Link href="/insights" className="mt-8 inline-flex items-center gap-2 text-terracotta hover:underline font-medium">
               Read all essays <ArrowRight className="h-4 w-4" />

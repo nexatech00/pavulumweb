@@ -6,18 +6,24 @@ import type { Product } from "@/lib/products";
 const PLACEHOLDER =
   "https://images.unsplash.com/photo-1507842217343-583f20270319?auto=format&fit=crop&w=800&q=80";
 
+// Physical products (apparel) look better with cover; digital/books with contain
+const COVER_TYPES = new Set(["APPAREL"]);
+
 export function ProductCard({ product }: { product: Product }) {
   const img = product.thumbnail ?? product.images[0] ?? PLACEHOLDER;
+  const useCover = COVER_TYPES.has(product.type);
 
   return (
     <Link href={`/product/${product.slug}`} className="group block">
-      <div className="relative overflow-hidden rounded-2xl bg-secondary">
+      <div className="relative overflow-hidden rounded-2xl bg-[#f5ede6]">
         <Image
           src={img}
           alt={product.title}
           width={600}
           height={750}
-          className="aspect-[4/5] w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+          className={`aspect-[4/5] w-full transition-transform duration-500 group-hover:scale-[1.02] ${
+            useCover ? "object-cover" : "object-contain p-4"
+          }`}
         />
         {product.comingSoon && (
           <div className="absolute inset-0 flex items-center justify-center bg-deep-brown/50 backdrop-blur-[2px]">

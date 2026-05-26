@@ -470,12 +470,17 @@ function LibraryCard({ product, purchasedAt }: { product: Product; purchasedAt: 
     month: "short", day: "numeric", year: "numeric",
   });
   const TypeIcon = typeIcon(product.type);
+  const useCover = product.type === "APPAREL";
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="relative aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
-        <Image src={img} alt={product.title} fill className="object-contain" />
-        <div className="absolute inset-0 bg-gradient-to-t from-deep-brown/50 to-transparent" />
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#f5ede6]">
+        <Image
+          src={img}
+          alt={product.title}
+          fill
+          className={useCover ? "object-cover" : "object-contain p-4"}
+        />
         <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-cream/90 px-2.5 py-0.5 text-xs font-medium text-deep-brown capitalize">
           <TypeIcon className="h-3 w-3" />
           {product.type.toLowerCase()}

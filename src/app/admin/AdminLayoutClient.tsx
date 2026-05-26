@@ -20,6 +20,8 @@ import {
   UserCircle,
   Headphones,
   FileQuestion,
+  Radio,
+  PenLine,
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 
@@ -41,6 +43,13 @@ const NAV = [
       { href: "/admin/journal", label: "Journal", icon: NotebookPen },
       { href: "/admin/questionnaire", label: "Questionnaires", icon: FileQuestion },
       { href: "/admin/audiobook", label: "Audiobooks", icon: Headphones },
+    ],
+  },
+  {
+    label: "Content",
+    items: [
+      { href: "/admin/episodes", label: "Episodes", icon: Radio },
+      { href: "/admin/essays", label: "Essays", icon: PenLine },
     ],
   },
   {

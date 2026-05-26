@@ -132,12 +132,17 @@ function PurchaseSection({ title, icon: Icon, items }: {
 function PurchaseCard({ product, purchasedAt }: { product: Product; purchasedAt: string }) {
   const img = product.thumbnail ?? product.images[0] ?? PLACEHOLDER;
   const date = new Date(purchasedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const useCover = product.type === "APPAREL";
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="relative aspect-[16/9] overflow-hidden bg-secondary">
-        <Image src={img} alt={product.title} fill className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-deep-brown/60 to-transparent" />
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#f5ede6]">
+        <Image
+          src={img}
+          alt={product.title}
+          fill
+          className={useCover ? "object-cover" : "object-contain p-4"}
+        />
         <span className="absolute bottom-3 left-3 rounded-full bg-cream/90 px-2.5 py-0.5 text-xs font-medium text-deep-brown capitalize">
           {product.type.toLowerCase()}
         </span>

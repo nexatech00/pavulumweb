@@ -106,14 +106,26 @@ export function ProductPageClient({ slug }: { slug: string }) {
         <div className="grid gap-12 md:grid-cols-2">
           {/* Images */}
           <div>
-            <div className="overflow-hidden rounded-2xl bg-secondary">
-              <Image src={images[safeActive]} alt={product.title} width={600} height={600} className="aspect-square w-full object-cover" />
+            <div className="overflow-hidden rounded-2xl bg-[#f5ede6]">
+              <Image
+                src={images[safeActive]}
+                alt={product.title}
+                width={600}
+                height={600}
+                className={`aspect-square w-full ${product.type === "APPAREL" ? "object-cover" : "object-contain p-6"}`}
+              />
             </div>
             {images.length > 1 && (
               <div className="mt-4 grid grid-cols-4 gap-3">
                 {images.map((src, i) => (
-                  <button key={src} onClick={() => setActive(i)} className={`overflow-hidden rounded-lg border-2 transition-colors ${i === safeActive ? "border-terracotta" : "border-transparent"}`}>
-                    <Image src={src} alt="" width={150} height={150} className="aspect-square w-full object-cover" />
+                  <button key={src} onClick={() => setActive(i)} className={`overflow-hidden rounded-lg border-2 transition-colors bg-[#f5ede6] ${i === safeActive ? "border-terracotta" : "border-transparent"}`}>
+                    <Image
+                      src={src}
+                      alt=""
+                      width={150}
+                      height={150}
+                      className={`aspect-square w-full ${product.type === "APPAREL" ? "object-cover" : "object-contain p-2"}`}
+                    />
                   </button>
                 ))}
               </div>
@@ -221,8 +233,16 @@ export function ProductPageClient({ slug }: { slug: string }) {
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
                 <Link key={r.id} href={`/product/${r.slug}`} className="group block">
-                  <div className="overflow-hidden rounded-2xl bg-secondary">
-                    <Image src={r.thumbnail ?? r.images[0] ?? PLACEHOLDER} alt={r.title} width={400} height={500} className="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]" />
+                  <div className="overflow-hidden rounded-2xl bg-[#f5ede6]">
+                    <Image
+                      src={r.thumbnail ?? r.images[0] ?? PLACEHOLDER}
+                      alt={r.title}
+                      width={400}
+                      height={500}
+                      className={`aspect-[4/5] w-full transition-transform duration-500 group-hover:scale-[1.02] ${
+                        r.type === "APPAREL" ? "object-cover" : "object-contain p-4"
+                      }`}
+                    />
                   </div>
                   <h3 className="mt-3 font-serif text-xl text-deep-brown">{r.title}</h3>
                   <p className="text-sm text-charcoal/70">${r.price.toFixed(2)}</p>

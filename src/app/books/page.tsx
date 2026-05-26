@@ -105,13 +105,13 @@ export default async function BooksPage() {
                     href={ab.comingSoon ? "/community" : `/product/${ab.slug}`}
                     className="group flex gap-6 overflow-hidden rounded-2xl bg-deep-brown p-6 transition-shadow hover:shadow-xl"
                   >
-                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl">
+                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#f5ede6]">
                       <Image
                         src={img}
                         alt={ab.title}
                         width={200}
                         height={200}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-contain"
                       />
                     </div>
                     <div className="flex flex-col justify-between">
