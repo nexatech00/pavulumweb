@@ -93,13 +93,13 @@ export default async function ProjectsPage() {
             <div className="grid gap-6 md:grid-cols-2 mb-10">
               {comingSoonCourses.map((c) => (
                 <div key={c.id} className="relative overflow-hidden rounded-2xl border border-dashed border-terracotta/30 bg-card p-7">
-                  <div className="mb-5 overflow-hidden rounded-xl">
+                  <div className="mb-5 overflow-hidden rounded-xl bg-secondary">
                     <Image
                       src={c.thumbnail ?? c.images[0] ?? COURSE_PLACEHOLDER}
                       alt={c.title}
                       width={600}
                       height={300}
-                      className="aspect-[2/1] w-full object-cover opacity-60"
+                      className="aspect-[2/1] w-full object-contain opacity-60"
                     />
                   </div>
                   <div className="flex items-start justify-between gap-3">
@@ -279,13 +279,13 @@ function CourseCard({ course }: { course: Product }) {
       href={`/product/${course.slug}`}
       className="group block overflow-hidden rounded-2xl bg-card shadow-sm transition-shadow hover:shadow-md"
     >
-      <div className="overflow-hidden">
+      <div className="overflow-hidden bg-secondary">
         <Image
           src={img}
           alt={course.title}
           width={800}
           height={500}
-          className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          className="aspect-[16/10] w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
         />
       </div>
       <div className="p-7">

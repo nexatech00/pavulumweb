@@ -2,17 +2,41 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { SiteLayout } from "@/components/site/Layout";
 import { useCart } from "@/lib/cart";
 
 export default function CheckoutPage() {
   const { detailed, subtotal, clear } = useCart();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  // Redirect unauthenticated users to login, preserving return URL
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login?callbackUrl=/checkout");
+    }
+  }, [status, router]);
+
   const hasPhysical = detailed.some((l) => !l.product.digital);
   const hasDigital = detailed.some((l) => l.product.digital);
   const shipping = hasPhysical ? 6 : 0;
   const total = subtotal + shipping;
   const [done, setDone] = useState<null | { email: string }>(null);
+
+  // Show nothing while checking auth
+  if (status === "loading" || status === "unauthenticated") {
+    return (
+      <SiteLayout>
+        <div className="mx-auto max-w-xl px-6 py-32 text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-terracotta border-t-transparent" />
+          <p className="mt-4 text-charcoal/60">Checking your account…</p>
+        </div>
+      </SiteLayout>
+    );
+  }
 
   if (detailed.length === 0 && !done) {
     return (
@@ -87,8 +111,8 @@ export default function CheckoutPage() {
         <div className="mt-10 grid gap-12 md:grid-cols-[1fr_320px]">
           <form onSubmit={onSubmit} className="space-y-8">
             <Fieldset legend="Contact">
-              <Field name="name" label="Full name" required />
-              <Field name="email" label="Email" type="email" required />
+              <Field name="name" label="Full name" required defaultValue={session?.user?.name ?? ""} />
+              <Field name="email" label="Email" type="email" required defaultValue={session?.user?.email ?? ""} />
               <Field name="phone" label="Phone (optional)" />
             </Fieldset>
 
@@ -190,12 +214,14 @@ function Field({
   type = "text",
   required,
   placeholder,
+  defaultValue,
 }: {
   name: string;
   label: string;
   type?: string;
   required?: boolean;
   placeholder?: string;
+  defaultValue?: string;
 }) {
   return (
     <label className="block">
@@ -205,6 +231,7 @@ function Field({
         type={type}
         required={required}
         placeholder={placeholder}
+        defaultValue={defaultValue}
         className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-2.5 text-charcoal placeholder:text-charcoal/35 focus:border-terracotta focus:outline-none"
       />
     </label>

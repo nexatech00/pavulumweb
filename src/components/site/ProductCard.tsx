@@ -17,7 +17,7 @@ export function ProductCard({ product }: { product: Product }) {
           alt={product.title}
           width={600}
           height={750}
-          className="aspect-[4/5] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          className="aspect-[4/5] w-full object-contain transition-transform duration-500 group-hover:scale-[1.02]"
         />
         {product.comingSoon && (
           <div className="absolute inset-0 flex items-center justify-center bg-deep-brown/50 backdrop-blur-[2px]">

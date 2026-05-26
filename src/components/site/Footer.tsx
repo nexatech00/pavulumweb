@@ -8,7 +8,7 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-4">
         <div>
           <Link href="/">
-            <Image src="/logo.png" alt="Pavulum" width={126} height={45} className="h-9 w-auto object-contain brightness-0 invert" />
+            <Image src="/logo.png" alt="Pavulum" width={160} height={57} className="h-12 w-auto object-contain" />
           </Link>
           <p className="mt-3 max-w-xs text-sm text-cream/70">
             Books, courses, and things for people who want to live more thoughtfully.

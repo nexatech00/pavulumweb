@@ -3,28 +3,93 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import { SiteLayout } from "@/components/site/Layout";
-import { ShoppingBag, BookOpen, Users, LogOut, CheckCircle } from "lucide-react";
+import {
+  ShoppingBag, BookOpen, Users, LogOut, CheckCircle,
+  Download, Play, GraduationCap, Mic2, NotebookPen,
+  Clock, XCircle, AlertCircle, Package,
+} from "lucide-react";
 import { PasswordInput } from "@/components/ui/PasswordInput";
+import type { Product } from "@/lib/products";
+
+// ── Types ──────────────────────────────────────────────────────────────────
+
+type Purchase = {
+  id: string;
+  createdAt: string;
+  amount: number;
+  status: string;
+  product: Product;
+};
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+const PLACEHOLDER =
+  "https://images.unsplash.com/photo-1507842217343-583f20270319?auto=format&fit=crop&w=400&q=80";
+
+function StatusBadge({ status }: { status: string }) {
+  if (status === "paid")
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+        <CheckCircle className="h-3 w-3" /> Paid
+      </span>
+    );
+  if (status === "pending")
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-700">
+        <Clock className="h-3 w-3" /> Pending
+      </span>
+    );
+  if (status === "refunded")
+    return (
+      <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700">
+        <XCircle className="h-3 w-3" /> Refunded
+      </span>
+    );
+  return (
+    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs text-charcoal/60">
+      <AlertCircle className="h-3 w-3" /> {status}
+    </span>
+  );
+}
+
+function typeIcon(type: string) {
+  switch (type) {
+    case "COURSE": return GraduationCap;
+    case "PODCAST": return Mic2;
+    case "JOURNAL": return NotebookPen;
+    default: return BookOpen;
+  }
+}
+
+// ── Main page ──────────────────────────────────────────────────────────────
 
 export default function ProfilePage() {
   const { data: session, status, update } = useSession();
   const user = session?.user;
   const router = useRouter();
 
-  const [tab, setTab] = useState<"overview" | "edit" | "security">("overview");
+  const [tab, setTab] = useState<"overview" | "library" | "orders" | "edit" | "security">("overview");
 
+  // Profile edit state
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [profileMsg, setProfileMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [savingProfile, setSavingProfile] = useState(false);
 
+  // Security state
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
   const [secMsg, setSecMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [savingSec, setSavingSec] = useState(false);
+
+  // Purchases state
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
+  const [purchasesLoading, setPurchasesLoading] = useState(false);
+  const [purchasesFetched, setPurchasesFetched] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -36,6 +101,21 @@ export default function ProfilePage() {
       setEmail(user.email ?? "");
     }
   }, [user]);
+
+  // Fetch purchases when library or orders tab is opened
+  useEffect(() => {
+    if ((tab === "library" || tab === "orders") && !purchasesFetched && status === "authenticated") {
+      setPurchasesLoading(true);
+      fetch("/api/purchases")
+        .then((r) => r.json())
+        .then((data) => {
+          setPurchases(Array.isArray(data) ? data : []);
+          setPurchasesFetched(true);
+          setPurchasesLoading(false);
+        })
+        .catch(() => setPurchasesLoading(false));
+    }
+  }, [tab, purchasesFetched, status]);
 
   if (status === "loading" || !user) return null;
 
@@ -77,11 +157,27 @@ export default function ProfilePage() {
     setCurrentPw(""); setNewPw(""); setConfirmPw("");
   };
 
-  const input = "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none";
+  const input =
+    "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none";
+
+  const tabs = [
+    { key: "overview", label: "Overview" },
+    { key: "library", label: "My Library" },
+    { key: "orders", label: "Orders" },
+    { key: "edit", label: "Edit profile" },
+    { key: "security", label: "Security" },
+  ] as const;
+
+  // Paid purchases for library
+  const paidPurchases = purchases.filter((p) => p.status === "paid");
+  const books = paidPurchases.filter((p) => ["BOOK", "AUDIOBOOK"].includes(p.product.type));
+  const courses = paidPurchases.filter((p) => p.product.type === "COURSE");
+  const other = paidPurchases.filter((p) => !["BOOK", "AUDIOBOOK", "COURSE"].includes(p.product.type));
 
   return (
     <SiteLayout>
       <div className="mx-auto max-w-4xl px-6 py-16">
+        {/* Avatar + name */}
         <div className="flex items-center gap-5">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-terracotta text-2xl font-bold text-cream uppercase">
             {user.name?.[0] ?? user.email?.[0] ?? "U"}
@@ -92,21 +188,26 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="mt-8 flex gap-1 rounded-xl border border-border bg-card p-1 w-fit">
-          {(["overview", "edit", "security"] as const).map((t) => (
+        {/* Tab bar */}
+        <div className="mt-8 flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1 w-fit">
+          {tabs.map((t) => (
             <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium capitalize transition-colors ${
-                tab === t ? "bg-deep-brown text-cream shadow-sm" : "text-charcoal/70 hover:text-charcoal"
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                tab === t.key
+                  ? "bg-deep-brown text-cream shadow-sm"
+                  : "text-charcoal/70 hover:text-charcoal"
               }`}
             >
-              {t === "edit" ? "Edit profile" : t === "security" ? "Security" : "Overview"}
+              {t.label}
             </button>
           ))}
         </div>
 
         <div className="mt-8">
+
+          {/* ── OVERVIEW ── */}
           {tab === "overview" && (
             <div className="space-y-6">
               <div className="rounded-2xl border border-border bg-card p-6">
@@ -132,20 +233,32 @@ export default function ProfilePage() {
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 {[
-                  { icon: ShoppingBag, label: "My orders", sub: "View purchase history", href: "/cart" },
-                  { icon: BookOpen, label: "My books", sub: "Access your library", href: "/projects" },
+                  { icon: BookOpen, label: "My Library", sub: "Access your purchases", action: () => setTab("library") },
+                  { icon: ShoppingBag, label: "My Orders", sub: "View order history", action: () => setTab("orders") },
                   { icon: Users, label: "Community", sub: "Connect with others", href: "/community" },
-                ].map(({ icon: Icon, label, sub, href }) => (
-                  <Link key={label} href={href} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
-                      <Icon className="h-5 w-5 text-terracotta" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-deep-brown">{label}</p>
-                      <p className="text-xs text-charcoal/55">{sub}</p>
-                    </div>
-                  </Link>
-                ))}
+                ].map(({ icon: Icon, label, sub, action, href }) =>
+                  href ? (
+                    <Link key={label} href={href} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                        <Icon className="h-5 w-5 text-terracotta" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-deep-brown">{label}</p>
+                        <p className="text-xs text-charcoal/55">{sub}</p>
+                      </div>
+                    </Link>
+                  ) : (
+                    <button key={label} onClick={action} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow text-left">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                        <Icon className="h-5 w-5 text-terracotta" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-deep-brown">{label}</p>
+                        <p className="text-xs text-charcoal/55">{sub}</p>
+                      </div>
+                    </button>
+                  )
+                )}
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
@@ -157,6 +270,112 @@ export default function ProfilePage() {
             </div>
           )}
 
+          {/* ── MY LIBRARY ── */}
+          {tab === "library" && (
+            <div>
+              {purchasesLoading ? (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5">
+                      <div className="aspect-[4/3] rounded-xl bg-secondary mb-4" />
+                      <div className="h-5 w-3/4 rounded bg-secondary mb-2" />
+                      <div className="h-4 w-1/2 rounded bg-secondary" />
+                    </div>
+                  ))}
+                </div>
+              ) : paidPurchases.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
+                  <BookOpen className="mx-auto mb-4 h-10 w-10 text-charcoal/30" />
+                  <h2 className="font-serif text-2xl text-deep-brown">Your library is empty</h2>
+                  <p className="mt-2 text-charcoal/60">Purchase books, courses, or other content to access them here.</p>
+                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                    Browse the shop
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-10">
+                  {books.length > 0 && (
+                    <LibrarySection title="Books & Audiobooks" icon={BookOpen} items={books} />
+                  )}
+                  {courses.length > 0 && (
+                    <LibrarySection title="Courses" icon={GraduationCap} items={courses} />
+                  )}
+                  {other.length > 0 && (
+                    <LibrarySection title="Other" icon={Package} items={other} />
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── ORDERS ── */}
+          {tab === "orders" && (
+            <div>
+              {purchasesLoading ? (
+                <div className="space-y-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5 h-20" />
+                  ))}
+                </div>
+              ) : purchases.length === 0 ? (
+                <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
+                  <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-charcoal/30" />
+                  <h2 className="font-serif text-2xl text-deep-brown">No orders yet</h2>
+                  <p className="mt-2 text-charcoal/60">Your order history will appear here after your first purchase.</p>
+                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                    Browse the shop
+                  </Link>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border bg-secondary/40">
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Product</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50 hidden sm:table-cell">Date</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Amount</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {purchases.map((p) => {
+                        const img = p.product.thumbnail ?? p.product.images?.[0] ?? PLACEHOLDER;
+                        const date = new Date(p.createdAt).toLocaleDateString("en-US", {
+                          month: "short", day: "numeric", year: "numeric",
+                        });
+                        return (
+                          <tr key={p.id} className="hover:bg-secondary/20 transition-colors">
+                            <td className="px-5 py-4">
+                              <div className="flex items-center gap-3">
+                                <Image
+                                  src={img}
+                                  alt={p.product.title}
+                                  width={44}
+                                  height={44}
+                                  className="h-11 w-11 rounded-lg object-contain bg-secondary shrink-0"
+                                />
+                                <div>
+                                  <p className="font-medium text-deep-brown leading-snug">{p.product.title}</p>
+                                  <p className="text-xs text-charcoal/50 capitalize">{p.product.type.toLowerCase()}</p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-5 py-4 text-charcoal/60 hidden sm:table-cell">{date}</td>
+                            <td className="px-5 py-4 text-charcoal/80">${p.amount.toFixed(2)}</td>
+                            <td className="px-5 py-4">
+                              <StatusBadge status={p.status} />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* ── EDIT PROFILE ── */}
           {tab === "edit" && (
             <div className="max-w-md">
               <form onSubmit={submitProfile} className="space-y-5">
@@ -181,6 +400,7 @@ export default function ProfilePage() {
             </div>
           )}
 
+          {/* ── SECURITY ── */}
           {tab === "security" && (
             <div className="max-w-md">
               <form onSubmit={submitSecurity} className="space-y-5">
@@ -210,8 +430,102 @@ export default function ProfilePage() {
               </form>
             </div>
           )}
+
         </div>
       </div>
     </SiteLayout>
+  );
+}
+
+// ── Library section ────────────────────────────────────────────────────────
+
+function LibrarySection({
+  title,
+  icon: Icon,
+  items,
+}: {
+  title: string;
+  icon: React.ElementType;
+  items: Purchase[];
+}) {
+  return (
+    <section>
+      <div className="mb-5 flex items-center gap-2">
+        <Icon className="h-5 w-5 text-terracotta" />
+        <h2 className="font-serif text-2xl text-deep-brown">{title}</h2>
+        <span className="ml-1 text-sm text-charcoal/50">({items.length})</span>
+      </div>
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map(({ id, product, createdAt }) => (
+          <LibraryCard key={id} product={product} purchasedAt={createdAt} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function LibraryCard({ product, purchasedAt }: { product: Product; purchasedAt: string }) {
+  const img = product.thumbnail ?? product.images?.[0] ?? PLACEHOLDER;
+  const date = new Date(purchasedAt).toLocaleDateString("en-US", {
+    month: "short", day: "numeric", year: "numeric",
+  });
+  const TypeIcon = typeIcon(product.type);
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-border bg-card">
+      <div className="relative aspect-[4/3] overflow-hidden bg-secondary flex items-center justify-center">
+        <Image src={img} alt={product.title} fill className="object-contain" />
+        <div className="absolute inset-0 bg-gradient-to-t from-deep-brown/50 to-transparent" />
+        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-cream/90 px-2.5 py-0.5 text-xs font-medium text-deep-brown capitalize">
+          <TypeIcon className="h-3 w-3" />
+          {product.type.toLowerCase()}
+        </span>
+      </div>
+      <div className="p-5">
+        <h3 className="font-serif text-lg text-deep-brown leading-snug">{product.title}</h3>
+        {product.author && <p className="mt-0.5 text-xs italic text-soft-gold">{product.author}</p>}
+        <p className="mt-1 text-xs text-charcoal/50">Purchased {date}</p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {/* Book / Journal / Audiobook — download */}
+          {(["BOOK", "JOURNAL", "AUDIOBOOK"].includes(product.type)) && product.fileUrl && (
+            <a
+              href={product.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+            >
+              <Download className="h-3.5 w-3.5" /> Download
+            </a>
+          )}
+          {/* Course */}
+          {product.type === "COURSE" && (
+            <Link
+              href={`/product/${product.slug}/learn`}
+              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+            >
+              <Play className="h-3.5 w-3.5" /> Start course
+            </Link>
+          )}
+          {/* Podcast */}
+          {product.type === "PODCAST" && product.podcastUrl && (
+            <a
+              href={product.podcastUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+            >
+              <Play className="h-3.5 w-3.5" /> Listen
+            </a>
+          )}
+          <Link
+            href={`/product/${product.slug}`}
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs text-charcoal/70 hover:bg-secondary transition-colors"
+          >
+            View details
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

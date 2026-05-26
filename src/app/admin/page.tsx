@@ -31,6 +31,28 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useProducts } from "@/lib/products";
 
+// ── Types ──────────────────────────────────────────────────────────────────
+
+interface MonthStat {
+  month: string;
+  revenue: number;
+  orders: number;
+}
+
+interface RevenueByType {
+  type: string;
+  revenue: number;
+}
+
+interface AdminStats {
+  months: MonthStat[];
+  revenueByType: RevenueByType[];
+  totalRevenue: number;
+  totalOrders: number;
+}
+
+// ── Hooks ──────────────────────────────────────────────────────────────────
+
 function useUserCount() {
   return useQuery<number>({
     queryKey: ["admin-user-count"],
@@ -55,33 +77,48 @@ function useOrderCount() {
   });
 }
 
-// ── Mock time-series data ──────────────────────────────────────────────────
-const revenueData = [
-  { month: "Jan", revenue: 1200 },
-  { month: "Feb", revenue: 1900 },
-  { month: "Mar", revenue: 1500 },
-  { month: "Apr", revenue: 2400 },
-  { month: "May", revenue: 2100 },
-  { month: "Jun", revenue: 3200 },
-  { month: "Jul", revenue: 2800 },
-];
+function useAdminStats() {
+  return useQuery<AdminStats>({
+    queryKey: ["admin-stats"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/stats");
+      if (!res.ok) throw new Error("Failed to fetch stats");
+      return res.json();
+    },
+  });
+}
 
-const ordersData = [
-  { month: "Jan", orders: 8 },
-  { month: "Feb", orders: 14 },
-  { month: "Mar", orders: 11 },
-  { month: "Apr", orders: 19 },
-  { month: "May", orders: 16 },
-  { month: "Jun", orders: 24 },
-  { month: "Jul", orders: 21 },
-];
+// ── Constants ──────────────────────────────────────────────────────────────
 
-const COLORS = ["#c0714a", "#8b5e3c", "#d4a574", "#6b4c35", "#e8c4a0"];
+const COLORS = ["#c0714a", "#8b5e3c", "#d4a574", "#6b4c35", "#e8c4a0", "#a0785a", "#f0d4b8"];
+
+const TYPE_LABELS: Record<string, string> = {
+  BOOK: "Books",
+  COURSE: "Courses",
+  APPAREL: "Apparel",
+  PODCAST: "Podcast",
+  JOURNAL: "Journal",
+  QUESTIONNAIRE: "Questionnaire",
+  AUDIOBOOK: "Audiobook",
+};
+
+// ── Skeleton loader ────────────────────────────────────────────────────────
+
+function ChartSkeleton({ height = "h-56" }: { height?: string }) {
+  return (
+    <div className={`${height} flex items-center justify-center`}>
+      <div className="h-full w-full animate-pulse rounded-xl bg-charcoal/5" />
+    </div>
+  );
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────
 
 export default function AdminDashboard() {
   const { data: products = [] } = useProducts();
   const { data: userCount = 0 } = useUserCount();
   const { data: orderCount = 0 } = useOrderCount();
+  const { data: stats, isLoading: statsLoading } = useAdminStats();
 
   const counts = {
     total: products.length,
@@ -94,6 +131,7 @@ export default function AdminDashboard() {
     audiobook: products.filter((p) => p.type === "AUDIOBOOK").length,
   };
 
+  // Pie chart: product catalogue by category
   const categoryPieData = [
     { name: "Books", value: counts.books },
     { name: "Courses", value: counts.courses },
@@ -103,6 +141,12 @@ export default function AdminDashboard() {
     { name: "Questionnaire", value: counts.questionnaire },
     { name: "Audiobook", value: counts.audiobook },
   ].filter((d) => d.value > 0);
+
+  // Revenue by product type pie data (from real purchases)
+  const revenueByTypePieData = (stats?.revenueByType ?? []).map((d) => ({
+    name: TYPE_LABELS[d.type] ?? d.type,
+    value: d.revenue,
+  }));
 
   const allStats = [
     { label: "Total",          value: counts.total,         href: "/admin/products",      icon: Package,       color: "bg-deep-brown/8 text-deep-brown" },
@@ -152,36 +196,64 @@ export default function AdminDashboard() {
         ))}
       </div>
 
+      {/* ── Revenue summary cards ── */}
+      <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-xs uppercase tracking-wider text-charcoal/50">Total Revenue</p>
+          {statsLoading ? (
+            <div className="mt-1 h-9 w-28 animate-pulse rounded-lg bg-charcoal/5" />
+          ) : (
+            <p className="mt-0.5 font-serif text-3xl text-deep-brown">
+              ${(stats?.totalRevenue ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </p>
+          )}
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-5">
+          <p className="text-xs uppercase tracking-wider text-charcoal/50">Paid Orders</p>
+          {statsLoading ? (
+            <div className="mt-1 h-9 w-16 animate-pulse rounded-lg bg-charcoal/5" />
+          ) : (
+            <p className="mt-0.5 font-serif text-3xl text-deep-brown">
+              {stats?.totalOrders ?? 0}
+            </p>
+          )}
+        </div>
+      </div>
+
       {/* ── Charts ── */}
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
 
         {/* Revenue area chart — spans 2 cols */}
         <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-charcoal/40">Revenue</p>
           <p className="mt-0.5 font-serif text-2xl text-deep-brown">Monthly overview</p>
           <div className="mt-6 h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#c0714a" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#c0714a" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e8ddd4" />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
-                <Tooltip
-                  contentStyle={{ borderRadius: 12, border: "1px solid #e8ddd4", fontSize: 12 }}
-                  formatter={(v: number) => [`$${v}`, "Revenue"]}
-                />
-                <Area type="monotone" dataKey="revenue" stroke="#c0714a" strokeWidth={2} fill="url(#revGrad)" dot={{ r: 3, fill: "#c0714a" }} activeDot={{ r: 5 }} />
-              </AreaChart>
-            </ResponsiveContainer>
+            {statsLoading ? (
+              <ChartSkeleton />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={stats?.months ?? []} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor="#c0714a" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#c0714a" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e8ddd4" />
+                  <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v}`} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, border: "1px solid #e8ddd4", fontSize: 12 }}
+                    formatter={(v: number) => [`$${v.toLocaleString()}`, "Revenue"]}
+                  />
+                  <Area type="monotone" dataKey="revenue" stroke="#c0714a" strokeWidth={2} fill="url(#revGrad)" dot={{ r: 3, fill: "#c0714a" }} activeDot={{ r: 5 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
-        {/* Category pie chart */}
+        {/* Category pie chart — product catalogue */}
         <div className="rounded-2xl border border-border bg-card p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-charcoal/40">Catalogue</p>
           <p className="mt-0.5 font-serif text-2xl text-deep-brown">By category</p>
@@ -215,22 +287,62 @@ export default function AdminDashboard() {
         </div>
 
         {/* Orders bar chart — full width */}
-        <div className="lg:col-span-3 rounded-2xl border border-border bg-card p-6">
+        <div className="lg:col-span-2 rounded-2xl border border-border bg-card p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.15em] text-charcoal/40">Orders</p>
           <p className="mt-0.5 font-serif text-2xl text-deep-brown">Monthly orders</p>
           <div className="mt-6 h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={ordersData} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barSize={28}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e8ddd4" vertical={false} />
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} />
-                <Tooltip
-                  contentStyle={{ borderRadius: 12, border: "1px solid #e8ddd4", fontSize: 12 }}
-                  cursor={{ fill: "#f5ede6" }}
-                />
-                <Bar dataKey="orders" fill="#c0714a" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {statsLoading ? (
+              <ChartSkeleton height="h-48" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={stats?.months ?? []} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barSize={28}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e8ddd4" vertical={false} />
+                  <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 11, fill: "#9a8070" }} axisLine={false} tickLine={false} allowDecimals={false} />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, border: "1px solid #e8ddd4", fontSize: 12 }}
+                    cursor={{ fill: "#f5ede6" }}
+                  />
+                  <Bar dataKey="orders" fill="#c0714a" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            )}
+          </div>
+        </div>
+
+        {/* Revenue by product type pie chart */}
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.15em] text-charcoal/40">Revenue</p>
+          <p className="mt-0.5 font-serif text-2xl text-deep-brown">By product type</p>
+          <div className="mt-6 h-48 flex items-center justify-center">
+            {statsLoading ? (
+              <ChartSkeleton height="h-48" />
+            ) : revenueByTypePieData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={revenueByTypePieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={70}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {revenueByTypePieData.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, border: "1px solid #e8ddd4", fontSize: 12 }}
+                    formatter={(v: number) => [`$${v.toLocaleString()}`, "Revenue"]}
+                  />
+                  <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <p className="text-sm text-charcoal/40">No paid orders yet.</p>
+            )}
           </div>
         </div>
 

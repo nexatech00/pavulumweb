@@ -77,15 +77,15 @@ export function HomePageClient() {
       {/* ── HERO ── */}
       <section className="relative h-[95vh] min-h-[680px] w-full overflow-hidden">
         <Image src={HERO} alt="" fill priority className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-deep-brown/40 via-deep-brown/20 to-deep-brown/85" />
-        <div className="paper-grain absolute inset-0" />
+        <div className="absolute inset-0 bg-gradient-to-b from-deep-brown/70 via-deep-brown/55 to-deep-brown/90" />
+        <div className="paper-grain absolute inset-0 opacity-40" />
         <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-soft-gold/90">A movement for intentional living</p>
-          <h1 className="mt-4 font-serif text-5xl tracking-wide text-cream sm:text-6xl md:text-7xl leading-tight">
+          <p className="text-sm uppercase tracking-[0.35em] text-soft-gold drop-shadow-md">A movement for intentional living</p>
+          <h1 className="mt-4 font-serif text-5xl tracking-wide text-white drop-shadow-lg sm:text-6xl md:text-7xl leading-tight">
             Slow down.<br />
-            <span className="text-soft-gold">Live deeper.</span>
+            <span className="text-soft-gold drop-shadow-md">Live deeper.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg italic text-cream/90 sm:text-xl leading-relaxed">
+          <p className="mt-6 max-w-2xl text-lg italic text-white/95 drop-shadow sm:text-xl leading-relaxed">
             Books, conversations, and community for parents, partners, and humans who want to grow — without the noise.
           </p>
           <div className="mt-10 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row">
