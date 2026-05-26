@@ -1,0 +1,147 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Menu, ShoppingBag, X } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
+import { useCart } from "@/lib/cart";
+
+const nav = [
+  { href: "/", label: "Home", exact: true },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Books & Projects" },
+  { href: "/shop", label: "Shop" },
+  { href: "/insights", label: "Podcast & Insights" },
+  { href: "/community", label: "Community" },
+] as const;
+
+export function Header() {
+  const { count } = useCart();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const isAdmin = (user as { role?: string } | undefined)?.role === "ADMIN";
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const isActive = (href: string, exact?: boolean) =>
+    exact ? pathname === href : pathname === href || pathname.startsWith(href);
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur">
+      <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-5">
+        <Link href="/" className="flex items-center">
+          <Image src="/logo.png" alt="Pavulum" width={140} height={50} className="h-10 w-auto object-contain" priority />
+        </Link>
+
+        <nav className="hidden items-center gap-7 md:flex">
+          {nav.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className={`text-sm transition-colors hover:text-terracotta ${
+                isActive(n.href, "exact" in n ? n.exact : false)
+                  ? "text-terracotta"
+                  : "text-charcoal/80"
+              }`}
+            >
+              {n.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-3">
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="hidden rounded-full border border-deep-brown/30 px-3 py-1.5 text-xs text-deep-brown hover:bg-secondary md:inline-flex"
+            >
+              Admin
+            </Link>
+          )}
+
+          {!user ? (
+            <>
+              <Link href="/login" className="hidden text-sm text-charcoal/80 hover:text-terracotta md:inline transition-colors">
+                Sign in
+              </Link>
+              <Link href="/signup" className="hidden rounded-full bg-terracotta px-4 py-1.5 text-xs text-cream hover:bg-terracotta-dark md:inline-flex transition-colors">
+                Sign up
+              </Link>
+            </>
+          ) : !isAdmin ? (
+            <div className="hidden items-center gap-3 md:flex">
+              <Link href="/dashboard" className="text-sm text-charcoal/70 hover:text-terracotta transition-colors">
+                My Library
+              </Link>
+              <Link href="/profile" className="flex items-center gap-2" aria-label="Profile">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-terracotta text-xs font-bold text-cream uppercase">
+                  {user.name?.[0] ?? user.email?.[0] ?? "U"}
+                </div>
+              </Link>
+            </div>
+          ) : null}
+
+          <Link
+            href="/cart"
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-deep-brown hover:bg-secondary"
+            aria-label="Cart"
+          >
+            <ShoppingBag className="h-5 w-5" />
+            {count > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-terracotta px-1 text-[11px] font-medium text-cream">
+                {count}
+              </span>
+            )}
+          </Link>
+
+          <button
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-deep-brown hover:bg-secondary md:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="border-t border-border/60 bg-background md:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col px-5 py-3">
+            {nav.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className={`py-3 text-base transition-colors ${
+                  isActive(n.href, "exact" in n ? n.exact : false)
+                    ? "text-terracotta"
+                    : "text-charcoal/85"
+                }`}
+              >
+                {n.label}
+              </Link>
+            ))}
+            {isAdmin && (
+              <Link href="/admin" onClick={() => setOpen(false)} className="py-3 text-base text-charcoal/85">Admin</Link>
+            )}
+            {!user ? (
+              <>
+                <Link href="/login" onClick={() => setOpen(false)} className="py-3 text-base text-charcoal/85">Sign in</Link>
+                <Link href="/signup" onClick={() => setOpen(false)} className="py-3 text-base text-terracotta font-medium">Sign up</Link>
+              </>
+            ) : !isAdmin ? (
+              <>
+                <Link href="/dashboard" onClick={() => setOpen(false)} className="py-3 text-base text-charcoal/85">My Library</Link>
+                <Link href="/profile" onClick={() => setOpen(false)} className="py-3 text-base text-charcoal/85">My profile</Link>
+                <button onClick={() => signOut({ callbackUrl: "/" })} className="py-3 text-left text-base text-charcoal/85">Sign out</button>
+              </>
+            ) : null}
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+}

@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ── NextAuth required models ──────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── Users ─────────────────────────────────────────────────────────────────
+
+model User {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String     @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role       @default(USER)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  accounts  Account[]
+  sessions  Session[]
+  purchases Purchase[]
+}
+
+// ── Products ──────────────────────────────────────────────────────────────
+
+model Product {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  slug            String      @unique
+  title           String
+  author          String?
+  type            ProductType @default(BOOK)
+  // Keep category for backwards compat with shop filters
+  category        Category    @default(books)
+  price           Float
+  description     String
+  longDescription String      @default("")
+  digital         Boolean     @default(false)
+  comingSoon      Boolean     @default(false)
+
+  // Media — stored as Cloudinary / S3 URLs, never raw files
+  thumbnail   String?   // main display image (Cloudinary)
+  images      String[]  // gallery images (Cloudinary)
+  fileUrl     String?   // PDF / ebook download URL
+  courseData  Json?     // { chapters: [{ title, videoUrl, duration }] }
+  podcastUrl  String?   // private audio stream URL
+  journalPdf  String?   // journal / workbook PDF URL
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchases Purchase[]
+}
+
+// ── Purchases ─────────────────────────────────────────────────────────────
+
+model Purchase {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  amount    Float
+  paymentId String   // Stripe payment_intent or session id
+  status    String   @default("paid") // paid | refunded | pending
+
+  user    User    @relation(fields: [userId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+// ── Editorial content ─────────────────────────────────────────────────────
+
+model Episode {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  title       String
+  description String
+  duration    String
+  spotifyUrl  String?
+  appleUrl    String?
+  youtubeUrl  String?
+  published   Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Essay {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug      String   @unique
+  title     String
+  excerpt   String
+  content   String   @default("")
+  readTime  String
+  published Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ── Enums ─────────────────────────────────────────────────────────────────
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Category {
+  books
+  courses
+  apparel
+}
+
+enum ProductType {
+  BOOK
+  COURSE
+  PODCAST
+  JOURNAL
+  APPAREL
+  QUESTIONNAIRE
+  AUDIOBOOK
+}
