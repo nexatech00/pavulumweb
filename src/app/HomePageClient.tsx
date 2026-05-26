@@ -71,7 +71,7 @@ const testimonials = [
     role: "Reader & community member",
   },
   {
-    quote: "I've listened to every episode twice. Jane asks the questions nobody else is asking.",
+    quote: "I've listened to every episode twice. Pav King asks the questions nobody else is asking.",
     name: "Priya S.",
     role: "Podcast listener",
   },
@@ -390,7 +390,7 @@ export function HomePageClient() {
           </div>
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">About the author</p>
-            <h2 className="mt-3 font-serif text-4xl text-deep-brown">I'm Jane.</h2>
+            <h2 className="mt-3 font-serif text-4xl text-deep-brown">I'm Pav King.</h2>
             <p className="mt-5 text-lg leading-relaxed text-charcoal/85">
               Pavulum began as late-night journal entries and conversations on the kitchen
               floor. It was never meant to be a brand — it was a practice. A way of paying
@@ -401,7 +401,7 @@ export function HomePageClient() {
               want to live more thoughtfully. As parents. As partners. As humans who would
               like to be a little less in a hurry.
             </p>
-            <p className="mt-5 font-serif text-xl text-soft-gold italic">— Jane</p>
+            <p className="mt-5 font-serif text-xl text-soft-gold italic">— Pav King</p>
             <Link href="/about" className="mt-6 inline-flex items-center gap-2 text-terracotta hover:underline font-medium">
               Read my full story <ArrowRight className="h-4 w-4" />
             </Link>

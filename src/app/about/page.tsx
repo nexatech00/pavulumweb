@@ -25,7 +25,7 @@ const BOOKS_IMG =
   "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80";
 
 const timeline = [
-  { year: "2018", title: "The journal begins", body: "Jane starts writing privately — late nights, kitchen table, no audience. Just questions she couldn't stop asking." },
+  { year: "2018", title: "The journal begins", body: "Pav King starts writing privately — late nights, kitchen table, no audience. Just questions he couldn't stop asking." },
   { year: "2020", title: "The first book", body: "The Chop Game is published. It sells out in three weeks. The inbox fills up with messages from strangers who felt seen." },
   { year: "2021", title: "The podcast launches", body: "What started as a conversation with a friend becomes a weekly show. 40,000 listeners in the first year." },
   { year: "2022", title: "Courses & community", body: "The first online course launches. A private community forms around it. People start showing up for each other." },
@@ -34,7 +34,7 @@ const timeline = [
 
 const pressQuotes = [
   { quote: "One of the most thoughtful voices in the intentional living space.", source: "The Slow Review" },
-  { quote: "Jane writes the way a good friend talks — honest, warm, and never preachy.", source: "Mindful Reads" },
+  { quote: "Pav King writes the way a good friend talks — honest, warm, and never preachy.", source: "Mindful Reads" },
   { quote: "Pavulum is what happens when someone decides to stop performing and start sharing.", source: "The Long Game Podcast" },
 ];
 
@@ -63,7 +63,7 @@ export default function AboutPage() {
           <div className="overflow-hidden rounded-2xl shadow-2xl">
             <Image
               src={FOUNDER}
-              alt="Jane, founder of Pavulum"
+              alt="Pav King, founder of Pavulum"
               width={800}
               height={1000}
               className="aspect-[4/5] w-full object-cover"
@@ -71,7 +71,7 @@ export default function AboutPage() {
           </div>
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">The author</p>
-            <h2 className="mt-3 font-serif text-5xl text-deep-brown">I'm Jane.</h2>
+            <h2 className="mt-3 font-serif text-5xl text-deep-brown">I'm Pav King.</h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-charcoal/85">
               <p>
                 I started writing because I couldn't stop thinking. About parenting. About
@@ -93,7 +93,7 @@ export default function AboutPage() {
                 writing it down — and sharing it honestly — makes the figuring-out a little
                 less lonely.
               </p>
-              <p className="font-serif text-2xl text-soft-gold italic">— Jane</p>
+              <p className="font-serif text-2xl text-soft-gold italic">— Pav King</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/projects" className="inline-flex items-center gap-2 rounded-full bg-terracotta px-7 py-3 text-cream hover:bg-terracotta-dark transition-colors">
