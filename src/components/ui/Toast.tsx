@@ -57,15 +57,15 @@ function ToastBubble({ item, onDismiss }: { item: ToastItem; onDismiss: () => vo
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       } ${
         item.type === "error"
-          ? "bg-destructive text-white"
-          : "bg-deep-brown text-cream"
+          ? "bg-red-700 text-white"
+          : "bg-[#1A1A1A] border border-white/15 text-white"
       }`}
       style={{ minWidth: 280, maxWidth: 380 }}
     >
       {item.type === "error" ? (
         <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-white/80" />
       ) : (
-        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-soft-gold" />
+        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-400" />
       )}
       <p className="flex-1 text-sm leading-relaxed">{item.message}</p>
       <button

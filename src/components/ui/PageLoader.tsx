@@ -54,7 +54,7 @@ export function PageLoader() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-cream transition-opacity duration-400 ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0C0C0C] transition-opacity duration-400 ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
@@ -77,7 +77,7 @@ export function PageLoader() {
       {/* Progress bar pinned to bottom */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-border/30">
         <div
-          className="h-full bg-terracotta transition-all duration-150 ease-out"
+          className="h-full bg-red-600 transition-all duration-150 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>

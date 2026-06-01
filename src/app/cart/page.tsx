@@ -15,21 +15,21 @@ export default function CartPage() {
   return (
     <SiteLayout>
       <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 className="font-serif text-5xl text-deep-brown">Your cart</h1>
+        <h1 className="font-serif text-5xl text-white">Your cart</h1>
 
         {detailed.length === 0 ? (
-          <div className="mt-12 rounded-2xl bg-card p-12 text-center shadow-sm shadow-deep-brown/5">
-            <p className="text-charcoal/70">Your cart is quiet.</p>
+          <div className="mt-12 rounded-2xl bg-[#1A1A1A] border border-white/10 p-12 text-center">
+            <p className="text-white/55">Your cart is quiet.</p>
             <Link
               href="/shop"
-              className="mt-6 inline-block rounded-full bg-terracotta px-6 py-2.5 text-cream hover:bg-terracotta-dark"
+              className="mt-6 inline-block rounded-full bg-red-600 px-6 py-2.5 text-white hover:bg-red-500"
             >
               Visit the shop
             </Link>
           </div>
         ) : (
           <div className="mt-10 grid gap-12 md:grid-cols-[1fr_320px]">
-            <ul className="divide-y divide-border">
+            <ul className="divide-y divide-white/10">
               {detailed.map(({ product, quantity, lineTotal }) => (
                 <li key={product.id} className="flex gap-5 py-6">
                   <Link href={`/product/${product.slug}`} className="shrink-0">
@@ -46,31 +46,31 @@ export default function CartPage() {
                       <div>
                         <Link
                           href={`/product/${product.slug}`}
-                          className="font-serif text-xl text-deep-brown hover:text-terracotta"
+                          className="font-serif text-xl text-white hover:text-red-400"
                         >
                           {product.title}
                         </Link>
-                        <p className="mt-1 text-sm text-charcoal/60 capitalize">
+                        <p className="mt-1 text-sm text-white/50 capitalize">
                           {product.category}
                         </p>
                       </div>
-                      <p className="text-deep-brown">${lineTotal.toFixed(2)}</p>
+                      <p className="text-white">${lineTotal.toFixed(2)}</p>
                     </div>
                     <div className="mt-auto flex items-center justify-between pt-4">
-                      <div className="inline-flex items-center rounded-full border border-border bg-card">
+                      <div className="inline-flex items-center rounded-full border border-white/15 bg-[#1A1A1A]">
                         <button
                           onClick={() => setQty(product.id, quantity - 1)}
-                          className="p-2 text-charcoal/70 hover:text-terracotta"
+                          className="p-2 text-white/50 hover:text-red-500"
                           aria-label="Decrease"
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <span className="w-8 text-center text-sm text-charcoal">
+                        <span className="w-8 text-center text-sm text-white">
                           {quantity}
                         </span>
                         <button
                           onClick={() => setQty(product.id, quantity + 1)}
-                          className="p-2 text-charcoal/70 hover:text-terracotta"
+                          className="p-2 text-white/50 hover:text-red-500"
                           aria-label="Increase"
                         >
                           <Plus className="h-4 w-4" />
@@ -78,7 +78,7 @@ export default function CartPage() {
                       </div>
                       <button
                         onClick={() => remove(product.id)}
-                        className="inline-flex items-center gap-1 text-sm text-charcoal/60 hover:text-destructive"
+                        className="inline-flex items-center gap-1 text-sm text-white/50 hover:text-red-500"
                       >
                         <Trash2 className="h-4 w-4" /> Remove
                       </button>
@@ -88,20 +88,20 @@ export default function CartPage() {
               ))}
             </ul>
 
-            <aside className="h-fit rounded-2xl bg-card p-6 shadow-sm shadow-deep-brown/5">
-              <h2 className="font-serif text-xl text-deep-brown">Order summary</h2>
+            <aside className="h-fit rounded-2xl bg-[#1A1A1A] border border-white/10 p-6">
+              <h2 className="font-serif text-xl text-white">Order summary</h2>
               <dl className="mt-5 space-y-2 text-sm">
                 <Row label="Subtotal" value={`${subtotal.toFixed(2)}`} />
                 <Row
                   label={hasPhysical ? "Shipping (est.)" : "Shipping"}
                   value={hasPhysical ? `${shipping.toFixed(2)}` : "Free"}
                 />
-                <div className="my-3 h-px bg-border" />
+                <div className="my-3 h-px bg-white/10" />
                 <Row label="Total" value={`${total.toFixed(2)}`} bold />
               </dl>
               <Link
                 href="/checkout"
-                className="mt-6 block rounded-full bg-terracotta px-6 py-3 text-center text-cream hover:bg-terracotta-dark"
+                className="mt-6 block rounded-full bg-red-600 px-6 py-3 text-center text-white hover:bg-red-500"
               >
                 Proceed to checkout
               </Link>
@@ -113,21 +113,9 @@ export default function CartPage() {
   );
 }
 
-function Row({
-  label,
-  value,
-  bold,
-}: {
-  label: string;
-  value: string;
-  bold?: boolean;
-}) {
+function Row({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div
-      className={`flex items-center justify-between ${
-        bold ? "text-base text-deep-brown" : "text-charcoal/80"
-      }`}
-    >
+    <div className={`flex items-center justify-between ${bold ? "text-base text-white" : "text-white/65"}`}>
       <dt>{label}</dt>
       <dd>{value}</dd>
     </div>

@@ -49,7 +49,7 @@ function StatusBadge({ status }: { status: string }) {
       </span>
     );
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2.5 py-0.5 text-xs text-charcoal/60">
+    <span className="inline-flex items-center gap-1 rounded-full bg-[#1A1A1A] border border-white/10 px-2.5 py-0.5 text-xs text-white/50">
       <AlertCircle className="h-3 w-3" /> {status}
     </span>
   );
@@ -158,7 +158,7 @@ export default function ProfilePage() {
   };
 
   const input =
-    "w-full rounded-xl border border-border bg-background px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none";
+    "w-full rounded-xl border border-white/15 bg-[#0C0C0C] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none";
 
   const tabs = [
     { key: "overview", label: "Overview" },
@@ -179,25 +179,25 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-4xl px-6 py-16">
         {/* Avatar + name */}
         <div className="flex items-center gap-5">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-terracotta text-2xl font-bold text-cream uppercase">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 text-2xl font-bold text-white uppercase">
             {user.name?.[0] ?? user.email?.[0] ?? "U"}
           </div>
           <div>
-            <h1 className="font-serif text-3xl text-deep-brown">{user.name}</h1>
-            <p className="text-sm text-charcoal/60">{user.email}</p>
+            <h1 className="font-serif text-3xl text-white">{user.name}</h1>
+            <p className="text-sm text-white/50">{user.email}</p>
           </div>
         </div>
 
         {/* Tab bar */}
-        <div className="mt-8 flex flex-wrap gap-1 rounded-xl border border-border bg-card p-1 w-fit">
+        <div className="mt-8 flex flex-wrap gap-1 rounded-xl border border-white/10 bg-[#1A1A1A] p-1 w-fit">
           {tabs.map((t) => (
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 tab === t.key
-                  ? "bg-deep-brown text-cream shadow-sm"
-                  : "text-charcoal/70 hover:text-charcoal"
+                  ? "bg-red-600 text-white shadow-sm"
+                  : "text-white/55 hover:text-white"
               }`}
             >
               {t.label}
@@ -210,21 +210,21 @@ export default function ProfilePage() {
           {/* ── OVERVIEW ── */}
           {tab === "overview" && (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-border bg-card p-6">
-                <h2 className="font-serif text-xl text-deep-brown mb-4">Account details</h2>
+              <div className="rounded-2xl border border-white/10 bg-[#1A1A1A] p-6">
+                <h2 className="font-serif text-xl text-white mb-4">Account details</h2>
                 <dl className="space-y-3 text-sm">
                   <div className="flex gap-4">
-                    <dt className="w-24 shrink-0 text-charcoal/50 uppercase tracking-wider text-xs pt-0.5">Name</dt>
-                    <dd className="text-charcoal">{user.name}</dd>
+                    <dt className="w-24 shrink-0 text-white/40 uppercase tracking-wider text-xs pt-0.5">Name</dt>
+                    <dd className="text-white/80">{user.name}</dd>
                   </div>
                   <div className="flex gap-4">
-                    <dt className="w-24 shrink-0 text-charcoal/50 uppercase tracking-wider text-xs pt-0.5">Email</dt>
-                    <dd className="text-charcoal">{user.email}</dd>
+                    <dt className="w-24 shrink-0 text-white/40 uppercase tracking-wider text-xs pt-0.5">Email</dt>
+                    <dd className="text-white/80">{user.email}</dd>
                   </div>
                   <div className="flex gap-4">
-                    <dt className="w-24 shrink-0 text-charcoal/50 uppercase tracking-wider text-xs pt-0.5">Role</dt>
+                    <dt className="w-24 shrink-0 text-white/40 uppercase tracking-wider text-xs pt-0.5">Role</dt>
                     <dd>
-                      <span className="rounded-full bg-terracotta/15 px-2.5 py-0.5 text-xs font-medium text-terracotta capitalize">
+                      <span className="rounded-full bg-red-600/20 px-2.5 py-0.5 text-xs font-medium text-red-400 capitalize">
                         Member
                       </span>
                     </dd>
@@ -238,23 +238,23 @@ export default function ProfilePage() {
                   { icon: Users, label: "Community", sub: "Connect with others", href: "/community" },
                 ].map(({ icon: Icon, label, sub, action, href }) =>
                   href ? (
-                    <Link key={label} href={href} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
-                        <Icon className="h-5 w-5 text-terracotta" />
+                    <Link key={label} href={href} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#1A1A1A] p-5 hover:shadow-md transition-shadow">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-600/20">
+                        <Icon className="h-5 w-5 text-red-500" />
                       </div>
                       <div>
-                        <p className="font-medium text-deep-brown">{label}</p>
-                        <p className="text-xs text-charcoal/55">{sub}</p>
+                        <p className="font-medium text-white">{label}</p>
+                        <p className="text-xs text-white/45">{sub}</p>
                       </div>
                     </Link>
                   ) : (
-                    <button key={label} onClick={action} className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 hover:shadow-md transition-shadow text-left">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary">
-                        <Icon className="h-5 w-5 text-terracotta" />
+                    <button key={label} onClick={action} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#1A1A1A] p-5 hover:shadow-md transition-shadow text-left">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-600/20">
+                        <Icon className="h-5 w-5 text-red-500" />
                       </div>
                       <div>
-                        <p className="font-medium text-deep-brown">{label}</p>
-                        <p className="text-xs text-charcoal/55">{sub}</p>
+                        <p className="font-medium text-white">{label}</p>
+                        <p className="text-xs text-white/45">{sub}</p>
                       </div>
                     </button>
                   )
@@ -262,7 +262,7 @@ export default function ProfilePage() {
               </div>
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="flex items-center gap-2 text-sm text-charcoal/60 hover:text-destructive transition-colors"
+                className="flex items-center gap-2 text-sm text-white/45 hover:text-red-500 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 Sign out
@@ -276,19 +276,19 @@ export default function ProfilePage() {
               {purchasesLoading ? (
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5">
-                      <div className="aspect-[4/3] rounded-xl bg-secondary mb-4" />
-                      <div className="h-5 w-3/4 rounded bg-secondary mb-2" />
-                      <div className="h-4 w-1/2 rounded bg-secondary" />
+                    <div key={i} className="animate-pulse rounded-2xl border border-white/10 bg-[#1A1A1A] p-5">
+                      <div className="aspect-[4/3] rounded-xl bg-[#111111] mb-4" />
+                      <div className="h-5 w-3/4 rounded bg-[#111111] mb-2" />
+                      <div className="h-4 w-1/2 rounded bg-[#111111]" />
                     </div>
                   ))}
                 </div>
               ) : paidPurchases.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
-                  <BookOpen className="mx-auto mb-4 h-10 w-10 text-charcoal/30" />
-                  <h2 className="font-serif text-2xl text-deep-brown">Your library is empty</h2>
-                  <p className="mt-2 text-charcoal/60">Purchase books, courses, or other content to access them here.</p>
-                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                <div className="rounded-2xl border border-dashed border-white/15 bg-[#1A1A1A] p-12 text-center">
+                  <BookOpen className="mx-auto mb-4 h-10 w-10 text-white/25" />
+                  <h2 className="font-serif text-2xl text-white">Your library is empty</h2>
+                  <p className="mt-2 text-white/50">Purchase books, courses, or other content to access them here.</p>
+                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
                     Browse the shop
                   </Link>
                 </div>
@@ -314,37 +314,37 @@ export default function ProfilePage() {
               {purchasesLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5 h-20" />
+                    <div key={i} className="animate-pulse rounded-2xl border border-white/10 bg-[#1A1A1A] p-5 h-20" />
                   ))}
                 </div>
               ) : purchases.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center">
-                  <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-charcoal/30" />
-                  <h2 className="font-serif text-2xl text-deep-brown">No orders yet</h2>
-                  <p className="mt-2 text-charcoal/60">Your order history will appear here after your first purchase.</p>
-                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                <div className="rounded-2xl border border-dashed border-white/15 bg-[#1A1A1A] p-12 text-center">
+                  <ShoppingBag className="mx-auto mb-4 h-10 w-10 text-white/25" />
+                  <h2 className="font-serif text-2xl text-white">No orders yet</h2>
+                  <p className="mt-2 text-white/50">Your order history will appear here after your first purchase.</p>
+                  <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
                     Browse the shop
                   </Link>
                 </div>
               ) : (
-                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#1A1A1A]">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-border bg-secondary/40">
-                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Product</th>
-                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50 hidden sm:table-cell">Date</th>
-                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Amount</th>
-                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-charcoal/50">Status</th>
+                      <tr className="border-b border-white/10 bg-[#111111]">
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-white/40">Product</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-white/40 hidden sm:table-cell">Date</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-white/40">Amount</th>
+                        <th className="px-5 py-3 text-left text-xs uppercase tracking-wider text-white/40">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border">
+                    <tbody className="divide-y divide-white/10">
                       {purchases.map((p) => {
                         const img = p.product.thumbnail ?? p.product.images?.[0] ?? PLACEHOLDER;
                         const date = new Date(p.createdAt).toLocaleDateString("en-US", {
                           month: "short", day: "numeric", year: "numeric",
                         });
                         return (
-                          <tr key={p.id} className="hover:bg-secondary/20 transition-colors">
+                          <tr key={p.id} className="hover:bg-white/5 transition-colors">
                             <td className="px-5 py-4">
                               <div className="flex items-center gap-3">
                                 <Image
@@ -352,16 +352,16 @@ export default function ProfilePage() {
                                   alt={p.product.title}
                                   width={44}
                                   height={44}
-                                  className="h-11 w-11 rounded-lg object-contain bg-secondary shrink-0"
+                                  className="h-11 w-11 rounded-lg object-contain bg-[#111111] shrink-0"
                                 />
                                 <div>
-                                  <p className="font-medium text-deep-brown leading-snug">{p.product.title}</p>
-                                  <p className="text-xs text-charcoal/50 capitalize">{p.product.type.toLowerCase()}</p>
+                                  <p className="font-medium text-white leading-snug">{p.product.title}</p>
+                                  <p className="text-xs text-white/40 capitalize">{p.product.type.toLowerCase()}</p>
                                 </div>
                               </div>
                             </td>
-                            <td className="px-5 py-4 text-charcoal/60 hidden sm:table-cell">{date}</td>
-                            <td className="px-5 py-4 text-charcoal/80">${p.amount.toFixed(2)}</td>
+                            <td className="px-5 py-4 text-white/50 hidden sm:table-cell">{date}</td>
+                            <td className="px-5 py-4 text-white/70">${p.amount.toFixed(2)}</td>
                             <td className="px-5 py-4">
                               <StatusBadge status={p.status} />
                             </td>
@@ -380,20 +380,20 @@ export default function ProfilePage() {
             <div className="max-w-md">
               <form onSubmit={submitProfile} className="space-y-5">
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">Full name</label>
+                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">Full name</label>
                   <input type="text" required value={name} onChange={(e) => setName(e.target.value)} className={input} />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">Email</label>
+                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">Email</label>
                   <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={input} />
                 </div>
                 {profileMsg && (
-                  <p className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm ${profileMsg.ok ? "bg-green-50 text-green-700" : "bg-destructive/10 text-destructive"}`}>
+                  <p className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm ${profileMsg.ok ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"}`}>
                     {profileMsg.ok && <CheckCircle className="h-4 w-4" />}
                     {profileMsg.text}
                   </p>
                 )}
-                <button type="submit" disabled={savingProfile} className="rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark disabled:opacity-60 transition-colors">
+                <button type="submit" disabled={savingProfile} className="rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors">
                   {savingProfile ? "Saving…" : "Save changes"}
                 </button>
               </form>
@@ -404,27 +404,27 @@ export default function ProfilePage() {
           {tab === "security" && (
             <div className="max-w-md">
               <form onSubmit={submitSecurity} className="space-y-5">
-                <div className="rounded-xl bg-secondary/60 px-4 py-4">
-                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">
-                    Current password <span className="text-terracotta">*</span>
+                <div className="rounded-xl bg-[#111111] border border-white/10 px-4 py-4">
+                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">
+                    Current password <span className="text-red-500">*</span>
                   </label>
                   <PasswordInput required value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Enter current password" className={input} />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">New password</label>
+                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">New password</label>
                   <PasswordInput required value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="Min. 6 characters" className={input} />
                 </div>
                 <div>
-                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">Confirm new password</label>
+                  <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">Confirm new password</label>
                   <PasswordInput required value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="••••••••" className={input} />
                 </div>
                 {secMsg && (
-                  <p className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm ${secMsg.ok ? "bg-green-50 text-green-700" : "bg-destructive/10 text-destructive"}`}>
+                  <p className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm ${secMsg.ok ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"}`}>
                     {secMsg.ok && <CheckCircle className="h-4 w-4" />}
                     {secMsg.text}
                   </p>
                 )}
-                <button type="submit" disabled={savingSec} className="rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark disabled:opacity-60 transition-colors">
+                <button type="submit" disabled={savingSec} className="rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors">
                   {savingSec ? "Updating…" : "Update password"}
                 </button>
               </form>
@@ -451,9 +451,9 @@ function LibrarySection({
   return (
     <section>
       <div className="mb-5 flex items-center gap-2">
-        <Icon className="h-5 w-5 text-terracotta" />
-        <h2 className="font-serif text-2xl text-deep-brown">{title}</h2>
-        <span className="ml-1 text-sm text-charcoal/50">({items.length})</span>
+        <Icon className="h-5 w-5 text-red-500" />
+        <h2 className="font-serif text-2xl text-white">{title}</h2>
+        <span className="ml-1 text-sm text-white/40">({items.length})</span>
       </div>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map(({ id, product, createdAt }) => (
@@ -473,59 +473,56 @@ function LibraryCard({ product, purchasedAt }: { product: Product; purchasedAt: 
   const useCover = product.type === "APPAREL";
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#f5ede6]">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#1A1A1A]">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#111111]">
         <Image
           src={img}
           alt={product.title}
           fill
           className={useCover ? "object-cover" : "object-contain p-4"}
         />
-        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-cream/90 px-2.5 py-0.5 text-xs font-medium text-deep-brown capitalize">
+        <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/70 px-2.5 py-0.5 text-xs font-medium text-white capitalize">
           <TypeIcon className="h-3 w-3" />
           {product.type.toLowerCase()}
         </span>
       </div>
       <div className="p-5">
-        <h3 className="font-serif text-lg text-deep-brown leading-snug">{product.title}</h3>
-        {product.author && <p className="mt-0.5 text-xs italic text-soft-gold">{product.author}</p>}
-        <p className="mt-1 text-xs text-charcoal/50">Purchased {date}</p>
+        <h3 className="font-serif text-lg text-white leading-snug">{product.title}</h3>
+        {product.author && <p className="mt-0.5 text-xs italic text-red-400">{product.author}</p>}
+        <p className="mt-1 text-xs text-white/40">Purchased {date}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {/* Book / Journal / Audiobook — download */}
           {(["BOOK", "JOURNAL", "AUDIOBOOK"].includes(product.type)) && product.fileUrl && (
             <a
               href={product.fileUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors"
             >
               <Download className="h-3.5 w-3.5" /> Download
             </a>
           )}
-          {/* Course */}
           {product.type === "COURSE" && (
             <Link
               href={`/product/${product.slug}/learn`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors"
             >
               <Play className="h-3.5 w-3.5" /> Start course
             </Link>
           )}
-          {/* Podcast */}
           {product.type === "PODCAST" && product.podcastUrl && (
             <a
               href={product.podcastUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors"
             >
               <Play className="h-3.5 w-3.5" /> Listen
             </a>
           )}
           <Link
             href={`/product/${product.slug}`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs text-charcoal/70 hover:bg-secondary transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-xs text-white/60 hover:bg-white/10 transition-colors"
           >
             View details
           </Link>

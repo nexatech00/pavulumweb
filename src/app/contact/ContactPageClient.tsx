@@ -9,16 +9,16 @@ export function ContactPageClient() {
   return (
     <SiteLayout>
       <div className="mx-auto max-w-xl px-6 py-20">
-        <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">Contact</p>
-        <h1 className="mt-3 font-serif text-5xl text-deep-brown">Say hello</h1>
-        <p className="mt-3 italic text-charcoal/70">
+        <p className="text-xs uppercase tracking-[0.2em] text-red-500">Contact</p>
+        <h1 className="mt-3 font-serif text-5xl text-white">Say hello</h1>
+        <p className="mt-3 italic text-white/55">
           We read every note. We reply when we can.
         </p>
 
         {sent ? (
-          <div className="mt-10 rounded-2xl bg-secondary/70 p-8 text-center">
-            <h2 className="font-serif text-2xl text-deep-brown">Thank you.</h2>
-            <p className="mt-2 text-charcoal/80">Your note is on its way to us.</p>
+          <div className="mt-10 rounded-2xl bg-[#1A1A1A] border border-white/10 p-8 text-center">
+            <h2 className="font-serif text-2xl text-white">Thank you.</h2>
+            <p className="mt-2 text-white/60">Your note is on its way to us.</p>
           </div>
         ) : (
           <form
@@ -31,17 +31,17 @@ export function ContactPageClient() {
             <Field name="name" label="Your name" required />
             <Field name="email" label="Email" type="email" required />
             <label className="block">
-              <span className="text-sm text-charcoal/75">Message</span>
+              <span className="text-sm text-white/55">Message</span>
               <textarea
                 name="message"
                 required
                 rows={6}
-                className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-3 text-charcoal placeholder:text-charcoal/35 focus:border-terracotta focus:outline-none"
+                className="mt-1 w-full rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-3 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none"
               />
             </label>
             <button
               type="submit"
-              className="rounded-full bg-terracotta px-7 py-3 text-cream hover:bg-terracotta-dark"
+              className="rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 transition-colors"
             >
               Send
             </button>
@@ -65,12 +65,12 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-sm text-charcoal/75">{label}</span>
+      <span className="text-sm text-white/55">{label}</span>
       <input
         name={name}
         type={type}
         required={required}
-        className="mt-1 w-full rounded-xl border border-border bg-card px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none"
+        className="mt-1 w-full rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none"
       />
     </label>
   );

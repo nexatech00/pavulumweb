@@ -66,13 +66,13 @@ export default function AdminUsers() {
 
       <div>
         <div>
-          <h1 className="font-serif text-4xl text-deep-brown">Users</h1>
-          <p className="mt-1 text-charcoal/70">{users.length} {users.length === 1 ? "user" : "users"}</p>
+          <h1 className="font-serif text-4xl text-white">Users</h1>
+          <p className="mt-1 text-white/50">{users.length} {users.length === 1 ? "user" : "users"}</p>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-card">
+        <div className="mt-8 overflow-hidden rounded-2xl border border-white/10 bg-[#1A1A1A]">
           <table className="w-full text-left">
-            <thead className="border-b border-border bg-secondary/40 text-xs uppercase tracking-wider text-charcoal/60">
+            <thead className="border-b border-white/10 bg-[#111111] text-xs uppercase tracking-wider text-white/40">
               <tr>
                 <th className="px-5 py-3">User</th>
                 <th className="px-5 py-3">Role</th>
@@ -82,34 +82,34 @@ export default function AdminUsers() {
             </thead>
             <tbody>
               {isLoading && (
-                <tr><td colSpan={4} className="px-5 py-8 text-center text-charcoal/60">Loading…</td></tr>
+                <tr><td colSpan={4} className="px-5 py-8 text-center text-white/40">Loading…</td></tr>
               )}
               {!isLoading && users.length === 0 && (
-                <tr><td colSpan={4} className="px-5 py-8 text-center text-charcoal/60">No users yet.</td></tr>
+                <tr><td colSpan={4} className="px-5 py-8 text-center text-white/40">No users yet.</td></tr>
               )}
               {users.map((u) => (
-                <tr key={u.id} className="border-b border-border last:border-0">
+                <tr key={u.id} className="border-b border-white/10 last:border-0 hover:bg-white/5 transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-terracotta text-xs font-bold text-cream uppercase">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white uppercase">
                         {(u.name?.[0] ?? u.email[0]).toUpperCase()}
                       </div>
                       <div>
-                        <p className="font-medium text-deep-brown">{u.name ?? "—"}</p>
-                        <p className="text-xs text-charcoal/60">{u.email}</p>
+                        <p className="font-medium text-white">{u.name ?? "—"}</p>
+                        <p className="text-xs text-white/50">{u.email}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-5 py-4">
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
                       u.role === "ADMIN"
-                        ? "bg-terracotta/15 text-terracotta"
-                        : "bg-secondary text-charcoal/70"
+                        ? "bg-red-600/20 text-red-400"
+                        : "bg-white/10 text-white/60"
                     }`}>
                       {u.role === "ADMIN" ? "Admin" : "Member"}
                     </span>
                   </td>
-                  <td className="px-5 py-4 text-sm text-charcoal/60">
+                  <td className="px-5 py-4 text-sm text-white/50">
                     {format(new Date(u.createdAt), "MMM d, yyyy")}
                   </td>
                   <td className="px-5 py-4">
@@ -117,7 +117,7 @@ export default function AdminUsers() {
                       {u.id !== session?.user?.id && (
                         <button
                           onClick={() => setPending({ id: u.id, email: u.email })}
-                          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-charcoal/70 hover:bg-secondary hover:text-destructive"
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-full text-white/40 hover:bg-red-600/20 hover:text-red-500 transition-colors"
                           aria-label="Delete user"
                         >
                           <Trash2 className="h-4 w-4" />

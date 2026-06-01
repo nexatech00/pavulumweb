@@ -15,7 +15,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <Link href={`/product/${product.slug}`} className="group block">
-      <div className="relative overflow-hidden rounded-2xl bg-[#f5ede6]">
+      <div className="relative overflow-hidden rounded-2xl bg-[#1A1A1A]">
         <Image
           src={img}
           alt={product.title}
@@ -26,24 +26,26 @@ export function ProductCard({ product }: { product: Product }) {
           }`}
         />
         {product.comingSoon && (
-          <div className="absolute inset-0 flex items-center justify-center bg-deep-brown/50 backdrop-blur-[2px]">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-cream/90 px-4 py-1.5 text-xs font-medium text-deep-brown">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-xs font-medium text-white">
               <Clock className="h-3 w-3" /> Coming soon
             </span>
           </div>
         )}
       </div>
       <div className="mt-4 space-y-1">
-        <h3 className="font-serif text-xl text-deep-brown">{product.title}</h3>
+        <h3 className="font-serif text-xl text-white">{product.title}</h3>
         {product.author && (
-          <p className="text-sm italic text-soft-gold">{product.author}</p>
+          <p className="text-sm italic text-red-400">{product.author}</p>
         )}
         <div className="flex items-center justify-between pt-1">
-          <span className="text-sm text-charcoal/80">${product.price.toFixed(2)}</span>
           {product.comingSoon ? (
-            <span className="text-sm text-charcoal/50">Notify me →</span>
+            <span className="text-sm text-white/40">Coming soon</span>
           ) : (
-            <span className="text-sm text-terracotta group-hover:underline">Buy →</span>
+            <>
+              <span className="text-sm text-white/60">${product.price.toFixed(2)}</span>
+              <span className="text-sm text-red-500 group-hover:underline">Buy →</span>
+            </>
           )}
         </div>
       </div>

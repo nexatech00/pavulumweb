@@ -6,10 +6,10 @@ import { ArrowRight, Heart, BookOpen, Mic2, Feather, Users, Star, Quote } from "
 
 export const metadata: Metadata = {
   title: "About",
-  description: "The story behind Pavulum — books, courses, and things for intentional living.",
+  description: "I'm Pav King. Pavulum is a place for honest conversations about life, love, relationships, parenting, responsibility, and personal growth.",
   openGraph: {
     title: "About Pavulum",
-    description: "The story behind Pavulum.",
+    description: "I'm Pav King. Pavulum means intellectual food — food for thought.",
   },
   alternates: { canonical: "/about" },
 };
@@ -48,11 +48,11 @@ export default function AboutPage() {
         <div className="relative z-10 mx-auto max-w-4xl">
           <p className="text-xs uppercase tracking-[0.3em] text-soft-gold">About Pavulum</p>
           <h1 className="mt-5 font-serif text-5xl leading-tight text-cream sm:text-6xl md:text-7xl">
-            People buy into <em className="text-soft-gold">you</em><br />
-            before they buy into products.
+            Intellectual food for the<br />
+            <em className="text-soft-gold">mind, heart, and spirit.</em>
           </h1>
           <p className="mt-6 text-xl italic text-cream/70 max-w-2xl mx-auto leading-relaxed">
-            Pavulum is a small, slow studio. Here's the story behind it — and the person who started it.
+            A place for honest conversations about life, love, relationships, parenting, responsibility, and personal growth.
           </p>
         </div>
       </section>
@@ -74,26 +74,29 @@ export default function AboutPage() {
             <h2 className="mt-3 font-serif text-5xl text-deep-brown">I'm Pav King.</h2>
             <div className="mt-6 space-y-5 text-lg leading-relaxed text-charcoal/85">
               <p>
-                I started writing because I couldn't stop thinking. About parenting. About
-                the conversations we avoid. About what it means to actually show up for the
-                people we love — not just in the big moments, but in the ordinary ones.
+                I created Pavulum as a place for honest conversations about life, love,
+                relationships, parenting, responsibility, and personal growth.
               </p>
               <p>
-                Pavulum began as late-night journal entries and conversations on the kitchen
-                floor. It was never meant to be a brand. It was a practice — a way of paying
-                attention to the things that kept slipping through the cracks.
+                I don't claim to have all the answers. I simply believe that many of life's
+                biggest challenges can be approached with more patience, more compassion,
+                more reflection, and more common sense.
               </p>
               <p>
-                Now it's books, courses, a podcast, and a growing community of people who
-                want to live more thoughtfully. As parents. As partners. As humans who would
-                like to be a little less in a hurry.
+                The name Pavulum represents food for thought. Through books, conversations,
+                courses, and media, my goal is to encourage people to think more deeply,
+                communicate more honestly, and treat one another with dignity and respect.
               </p>
               <p>
-                I don't have all the answers. I'm still figuring it out. But I've found that
-                writing it down — and sharing it honestly — makes the figuring-out a little
-                less lonely.
+                My mission is to create meaningful conversations that help people build
+                healthier relationships, stronger families, and more fulfilling lives.
               </p>
-              <p className="font-serif text-2xl text-soft-gold italic">— Pav King</p>
+              <p>
+                I believe in the Golden Rule. Treat people the way you would want to be
+                treated. Listen before judging. Seek understanding before conflict. Lead
+                with compassion, but never abandon common sense.
+              </p>
+              <p className="font-serif text-2xl text-soft-gold italic">Learn. Love. Laugh. — Pav King</p>
             </div>
             <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/projects" className="inline-flex items-center gap-2 rounded-full bg-terracotta px-7 py-3 text-cream hover:bg-terracotta-dark transition-colors">
@@ -112,45 +115,45 @@ export default function AboutPage() {
         <div className="mx-auto max-w-5xl px-6 py-24 text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-soft-gold">The Pavulum philosophy</p>
           <h2 className="mt-4 font-serif text-4xl text-deep-brown sm:text-5xl">
-            Slow is the point.
+            The values behind Pavulum are simple.
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-charcoal/80 max-w-3xl mx-auto">
-            We live in a world that rewards speed. Pavulum is a deliberate counterweight.
-            Everything we make is built to last longer than a season — to be read twice,
-            listened to slowly, worn until it softens. We believe the most important work
-            happens in the margins, in the pauses, in the questions we're afraid to ask.
+            Pavulum exists to encourage thoughtful reflection and practical wisdom in a world
+            that often moves too fast to appreciate either. The goal is not to tell people
+            what to think — it's to encourage people to think more deeply about the choices
+            they make, the relationships they build, and the lives they live.
           </p>
           <div className="mt-16 grid gap-6 text-left sm:grid-cols-3">
             {[
               {
                 icon: BookOpen,
-                title: "Make things that matter",
-                body: "Every book, course, and object we release is made with care. We'd rather make one good thing than ten forgettable ones. Quality over cadence, always.",
+                title: "Learn",
+                body: "Approach every conversation, relationship, and challenge as an opportunity to grow. Curiosity and humility go hand in hand.",
               },
               {
                 icon: Heart,
-                title: "Lead with honesty",
-                body: "We don't pretend to have all the answers. We share what we're learning, what we're struggling with, and what's actually helping — without the performance.",
+                title: "Love",
+                body: "Lead with compassion. Treat people the way you would want to be treated. Listen before judging. Seek understanding before conflict.",
               },
               {
                 icon: Mic2,
-                title: "Build real community",
-                body: "Pavulum isn't a platform. It's a gathering place for people who want to grow — together, in real time, without the noise of social media.",
+                title: "Laugh",
+                body: "Life is complicated enough without forgetting what matters most. Joy, lightness, and perspective are part of the practice.",
               },
               {
                 icon: Feather,
-                title: "Write to understand",
-                body: "Every essay, every book chapter, every podcast script starts as a question we couldn't answer. Writing is how we think out loud.",
+                title: "Think more deeply",
+                body: "Many of life's biggest challenges can be approached with more patience, more reflection, and more common sense than we give them.",
               },
               {
                 icon: Users,
-                title: "Grow together",
-                body: "The best ideas in Pavulum have come from the community. We listen more than we talk, and we build what people actually need.",
+                title: "Build stronger families",
+                body: "Healthier relationships and stronger families start with honest conversations. Pavulum is here to help start them.",
               },
               {
                 icon: Star,
-                title: "Earn trust slowly",
-                body: "We don't chase trends or optimize for virality. We show up consistently, do good work, and let the work speak for itself over time.",
+                title: "The Golden Rule",
+                body: "Treat people the way you would want to be treated. Never abandon common sense. Lead with dignity and respect.",
               },
             ].map(({ icon: Icon, title, body }) => (
               <div key={title} className="rounded-2xl border border-border bg-card p-7">
@@ -170,10 +173,10 @@ export default function AboutPage() {
         <div className="mx-auto max-w-3xl">
           <p className="text-xs uppercase tracking-[0.25em] text-soft-gold">Mission statement</p>
           <blockquote className="mt-8 font-serif text-3xl leading-relaxed text-cream sm:text-4xl">
-            "To create the books, conversations, and community that help people show up
-            more fully — for themselves, for their families, and for each other."
+            "To create meaningful conversations that help people build healthier relationships,
+            stronger families, and more fulfilling lives."
           </blockquote>
-          <p className="mt-8 text-cream/50">— Pavulum</p>
+          <p className="mt-8 text-cream/50">— Pav King, Pavulum</p>
         </div>
       </section>
 

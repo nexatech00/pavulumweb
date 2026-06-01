@@ -61,12 +61,12 @@ export default function DashboardPage() {
 
         {/* Header */}
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-terracotta text-xl font-bold text-cream uppercase">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 text-xl font-bold text-white uppercase">
             {session.user?.name?.[0] ?? session.user?.email?.[0] ?? "U"}
           </div>
           <div>
-            <h1 className="font-serif text-3xl text-deep-brown">My Library</h1>
-            <p className="text-sm text-charcoal/60">{session.user?.email}</p>
+            <h1 className="font-serif text-3xl text-white">My Library</h1>
+            <p className="text-sm text-white/50">{session.user?.email}</p>
           </div>
         </div>
 
@@ -78,19 +78,19 @@ export default function DashboardPage() {
         {loading ? (
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse rounded-2xl border border-border bg-card p-5">
-                <div className="aspect-[4/3] rounded-xl bg-secondary mb-4" />
-                <div className="h-5 w-3/4 rounded bg-secondary mb-2" />
-                <div className="h-4 w-1/2 rounded bg-secondary" />
+              <div key={i} className="animate-pulse rounded-2xl border border-white/10 bg-[#1A1A1A] p-5">
+                <div className="aspect-[4/3] rounded-xl bg-[#111111] mb-4" />
+                <div className="h-5 w-3/4 rounded bg-[#111111] mb-2" />
+                <div className="h-4 w-1/2 rounded bg-[#111111]" />
               </div>
             ))}
           </div>
         ) : purchases.length === 0 ? (
-          <div className="mt-16 rounded-2xl border border-dashed border-border bg-card p-12 text-center">
-            <Lock className="mx-auto mb-4 h-10 w-10 text-charcoal/30" />
-            <h2 className="font-serif text-2xl text-deep-brown">Your library is empty</h2>
-            <p className="mt-2 text-charcoal/60">Purchase books, courses, or other content to access them here.</p>
-            <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+          <div className="mt-16 rounded-2xl border border-dashed border-white/15 bg-[#1A1A1A] p-12 text-center">
+            <Lock className="mx-auto mb-4 h-10 w-10 text-white/25" />
+            <h2 className="font-serif text-2xl text-white">Your library is empty</h2>
+            <p className="mt-2 text-white/50">Purchase books, courses, or other content to access them here.</p>
+            <Link href="/shop" className="mt-6 inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
               Browse the shop
             </Link>
           </div>
@@ -116,9 +116,9 @@ function PurchaseSection({ title, icon: Icon, items }: {
   return (
     <section>
       <div className="mb-5 flex items-center gap-2">
-        <Icon className="h-5 w-5 text-terracotta" />
-        <h2 className="font-serif text-2xl text-deep-brown">{title}</h2>
-        <span className="ml-1 text-sm text-charcoal/50">({items.length})</span>
+        <Icon className="h-5 w-5 text-red-500" />
+        <h2 className="font-serif text-2xl text-white">{title}</h2>
+        <span className="ml-1 text-sm text-white/40">({items.length})</span>
       </div>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {items.map(({ id, product, createdAt }) => (
@@ -135,47 +135,44 @@ function PurchaseCard({ product, purchasedAt }: { product: Product; purchasedAt:
   const useCover = product.type === "APPAREL";
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-border bg-card">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#f5ede6]">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#1A1A1A]">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#111111]">
         <Image
           src={img}
           alt={product.title}
           fill
           className={useCover ? "object-cover" : "object-contain p-4"}
         />
-        <span className="absolute bottom-3 left-3 rounded-full bg-cream/90 px-2.5 py-0.5 text-xs font-medium text-deep-brown capitalize">
+        <span className="absolute bottom-3 left-3 rounded-full bg-black/70 px-2.5 py-0.5 text-xs font-medium text-white capitalize">
           {product.type.toLowerCase()}
         </span>
       </div>
       <div className="p-5">
-        <h3 className="font-serif text-lg text-deep-brown leading-snug">{product.title}</h3>
-        {product.author && <p className="mt-0.5 text-xs italic text-soft-gold">{product.author}</p>}
-        <p className="mt-1 text-xs text-charcoal/50">Purchased {date}</p>
+        <h3 className="font-serif text-lg text-white leading-snug">{product.title}</h3>
+        {product.author && <p className="mt-0.5 text-xs italic text-red-400">{product.author}</p>}
+        <p className="mt-1 text-xs text-white/40">Purchased {date}</p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {/* Book / Journal — download PDF */}
           {(product.type === "BOOK" || product.type === "JOURNAL") && product.fileUrl && (
             <a href={product.fileUrl} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors">
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors">
               <Download className="h-3.5 w-3.5" /> Download
             </a>
           )}
-          {/* Course — view chapters */}
           {product.type === "COURSE" && (
             <Link href={`/product/${product.slug}/learn`}
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors">
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors">
               <Play className="h-3.5 w-3.5" /> Start course
             </Link>
           )}
-          {/* Podcast — play */}
           {product.type === "PODCAST" && product.podcastUrl && (
             <a href={product.podcastUrl} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-terracotta px-4 py-2 text-xs text-cream hover:bg-terracotta-dark transition-colors">
+              className="inline-flex items-center gap-1.5 rounded-full bg-red-600 px-4 py-2 text-xs text-white hover:bg-red-500 transition-colors">
               <Play className="h-3.5 w-3.5" /> Listen
             </a>
           )}
           <Link href={`/product/${product.slug}`}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs text-charcoal/70 hover:bg-secondary transition-colors">
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-xs text-white/60 hover:bg-white/10 transition-colors">
             View details
           </Link>
         </div>

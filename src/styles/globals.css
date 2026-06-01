@@ -42,33 +42,41 @@
 :root {
   --radius: 0.75rem;
 
-  /* Brand palette */
-  --cream: oklch(0.961 0.018 85);
-  --terracotta: oklch(0.62 0.13 38);
-  --terracotta-dark: oklch(0.54 0.13 38);
-  --deep-brown: oklch(0.28 0.04 40);
-  --soft-gold: oklch(0.76 0.08 75);
-  --charcoal: oklch(0.28 0.005 0);
+  /* ── Pavulum — Black & Red theme ─────────────────────────────────────
+     Background: rich black
+     Primary accent: crimson red  #C0392B / #E74C3C
+     Text: warm white / light grey
+     Cards: dark charcoal (visible against black)
+     Sections: slightly lighter dark for contrast
+  ──────────────────────────────────────────────────────────────────── */
 
-  --background: var(--cream);
-  --foreground: var(--charcoal);
-  --card: oklch(0.98 0.012 85);
-  --card-foreground: var(--charcoal);
-  --popover: var(--cream);
-  --popover-foreground: var(--charcoal);
-  --primary: var(--terracotta);
-  --primary-foreground: var(--cream);
-  --secondary: oklch(0.92 0.022 80);
-  --secondary-foreground: var(--deep-brown);
-  --muted: oklch(0.93 0.018 80);
-  --muted-foreground: oklch(0.45 0.02 40);
-  --accent: var(--soft-gold);
-  --accent-foreground: var(--deep-brown);
-  --destructive: oklch(0.55 0.2 27);
-  --destructive-foreground: var(--cream);
-  --border: oklch(0.86 0.025 75);
-  --input: oklch(0.88 0.022 75);
-  --ring: var(--terracotta);
+  --cream:            #F0EAE0;            /* warm white — primary text        */
+  --terracotta:       #C0392B;            /* crimson red — primary accent     */
+  --terracotta-dark:  #A93226;            /* deeper red for hover             */
+  --deep-brown:       #1A1A1A;            /* dark charcoal — used as bg       */
+  --soft-gold:        #E74C3C;            /* bright red variant for accents   */
+  --charcoal:         #D5CEC6;            /* muted warm text                  */
+
+  /* Semantic tokens */
+  --background:            #0C0C0C;       /* rich black                       */
+  --foreground:            #F0EAE0;       /* warm white text                  */
+  --card:                  #1A1A1A;       /* dark charcoal card — visible     */
+  --card-foreground:       #F0EAE0;
+  --popover:               #161616;
+  --popover-foreground:    #F0EAE0;
+  --primary:               #C0392B;       /* crimson red                      */
+  --primary-foreground:    #FFFFFF;
+  --secondary:             #222222;       /* dark grey — section backgrounds  */
+  --secondary-foreground:  #D5CEC6;
+  --muted:                 #1E1E1E;
+  --muted-foreground:      #888880;
+  --accent:                #C0392B;
+  --accent-foreground:     #FFFFFF;
+  --destructive:           #991B1B;
+  --destructive-foreground:#FFFFFF;
+  --border:                #2E2E2E;       /* subtle visible border            */
+  --input:                 #1E1E1E;
+  --ring:                  #C0392B;
 }
 
 @layer base {
@@ -86,7 +94,7 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
-    color: var(--color-deep-brown);
+    color: var(--color-foreground);
     letter-spacing: -0.01em;
   }
 }

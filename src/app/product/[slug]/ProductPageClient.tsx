@@ -63,12 +63,12 @@ export function ProductPageClient({ slug }: { slug: string }) {
       <SiteLayout>
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-12 md:grid-cols-2 animate-pulse">
-            <div className="aspect-square rounded-2xl bg-secondary" />
+            <div className="aspect-square rounded-2xl bg-[#1A1A1A]" />
             <div className="space-y-4 pt-4">
-              <div className="h-4 w-24 rounded bg-secondary" />
-              <div className="h-10 w-3/4 rounded bg-secondary" />
-              <div className="h-6 w-20 rounded bg-secondary" />
-              <div className="h-24 rounded bg-secondary" />
+              <div className="h-4 w-24 rounded bg-[#1A1A1A]" />
+              <div className="h-10 w-3/4 rounded bg-[#1A1A1A]" />
+              <div className="h-6 w-20 rounded bg-[#1A1A1A]" />
+              <div className="h-24 rounded bg-[#1A1A1A]" />
             </div>
           </div>
         </div>
@@ -80,9 +80,9 @@ export function ProductPageClient({ slug }: { slug: string }) {
     return (
       <SiteLayout>
         <div className="mx-auto max-w-2xl px-6 py-32 text-center">
-          <h1 className="font-serif text-4xl text-deep-brown">Not found</h1>
-          <p className="mt-3 text-charcoal/70">We couldn't find that product.</p>
-          <Link href="/shop" className="mt-6 inline-block text-terracotta hover:underline">← Back to shop</Link>
+          <h1 className="font-serif text-4xl text-white">Not found</h1>
+          <p className="mt-3 text-white/55">We couldn't find that product.</p>
+          <Link href="/shop" className="mt-6 inline-block text-red-500 hover:underline">← Back to shop</Link>
         </div>
       </SiteLayout>
     );
@@ -99,14 +99,14 @@ export function ProductPageClient({ slug }: { slug: string }) {
   return (
     <SiteLayout>
       <div className="mx-auto max-w-6xl px-6 py-16">
-        <Link href="/shop" className="mb-10 inline-block text-sm text-charcoal/60 hover:text-terracotta">
+        <Link href="/shop" className="mb-10 inline-block text-sm text-white/50 hover:text-red-500 transition-colors">
           ← Back to shop
         </Link>
 
         <div className="grid gap-12 md:grid-cols-2">
           {/* Images */}
           <div>
-            <div className="overflow-hidden rounded-2xl bg-[#f5ede6]">
+            <div className="overflow-hidden rounded-2xl bg-[#1A1A1A]">
               <Image
                 src={images[safeActive]}
                 alt={product.title}
@@ -118,7 +118,13 @@ export function ProductPageClient({ slug }: { slug: string }) {
             {images.length > 1 && (
               <div className="mt-4 grid grid-cols-4 gap-3">
                 {images.map((src, i) => (
-                  <button key={src} onClick={() => setActive(i)} className={`overflow-hidden rounded-lg border-2 transition-colors bg-[#f5ede6] ${i === safeActive ? "border-terracotta" : "border-transparent"}`}>
+                  <button
+                    key={src}
+                    onClick={() => setActive(i)}
+                    className={`overflow-hidden rounded-lg border-2 transition-colors bg-[#1A1A1A] ${
+                      i === safeActive ? "border-red-600" : "border-transparent"
+                    }`}
+                  >
                     <Image
                       src={src}
                       alt=""
@@ -134,56 +140,55 @@ export function ProductPageClient({ slug }: { slug: string }) {
 
           {/* Details */}
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">{product.type.toLowerCase()}</p>
-            <h1 className="mt-2 font-serif text-4xl text-deep-brown sm:text-5xl">{product.title}</h1>
-            {product.author && <p className="mt-2 italic text-soft-gold">{product.author}</p>}
-            <p className="mt-6 text-2xl text-deep-brown">${product.price.toFixed(2)}</p>
-            <p className="mt-6 leading-relaxed text-charcoal/85">{product.longDescription || product.description}</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-red-500">{product.type.toLowerCase()}</p>
+            <h1 className="mt-2 font-serif text-4xl text-white sm:text-5xl">{product.title}</h1>
+            {product.author && <p className="mt-2 italic text-red-400">{product.author}</p>}
+            {!product.comingSoon && (
+              <p className="mt-6 text-2xl text-white">${product.price.toFixed(2)}</p>
+            )}
+            <p className="mt-6 leading-relaxed text-white/70">{product.longDescription || product.description}</p>
 
             {isDigital && !product.comingSoon && (
-              <p className="mt-5 rounded-2xl bg-secondary/70 px-4 py-3 text-sm italic text-deep-brown">
+              <p className="mt-5 rounded-2xl bg-[#1A1A1A] border border-white/10 px-4 py-3 text-sm italic text-white/60">
                 Buy once, access forever. Instant access after purchase.
               </p>
             )}
 
             {/* ── Coming soon ── */}
             {product.comingSoon && (
-              <div className="mt-8 rounded-2xl border-2 border-dashed border-terracotta/30 bg-terracotta/5 px-6 py-5">
-                <div className="flex items-center gap-2 text-terracotta">
+              <div className="mt-8 rounded-2xl border-2 border-dashed border-red-600/30 bg-red-600/5 px-6 py-5">
+                <div className="flex items-center gap-2 text-red-500">
                   <Clock className="h-5 w-5" />
                   <span className="font-medium">Coming soon</span>
                 </div>
-                <p className="mt-2 text-sm text-charcoal/70">
-                  This product isn't available yet. Join the list to be notified when it launches.
+                <p className="mt-2 text-sm text-white/60">
+                  This product is on its way. Check back soon.
                 </p>
-                <Link href="/community" className="mt-4 inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
-                  Notify me when available
-                </Link>
               </div>
             )}
 
             {/* ── Already purchased ── */}
             {!product.comingSoon && isPurchased && (
               <div className="mt-8 space-y-3">
-                <div className="flex items-center gap-2 rounded-2xl bg-green-50 border border-green-200 px-5 py-3">
-                  <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
-                  <span className="text-sm font-medium text-green-700">You own this — access it in your library.</span>
+                <div className="flex items-center gap-2 rounded-2xl bg-green-900/30 border border-green-700/40 px-5 py-3">
+                  <CheckCircle className="h-5 w-5 text-green-400 shrink-0" />
+                  <span className="text-sm font-medium text-green-400">You own this — access it in your library.</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
                   {product.fileUrl && (
                     <a href={product.fileUrl} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
                       <Download className="h-4 w-4" /> Download
                     </a>
                   )}
                   {product.type === "COURSE" && (
                     <Link href={`/product/${product.slug}/learn`}
-                      className="inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark transition-colors">
+                      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
                       <Play className="h-4 w-4" /> Start course
                     </Link>
                   )}
                   <Link href="/dashboard"
-                    className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm text-charcoal/70 hover:bg-secondary transition-colors">
+                    className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-2.5 text-sm text-white/60 hover:bg-white/10 transition-colors">
                     My library
                   </Link>
                 </div>
@@ -196,31 +201,37 @@ export function ProductPageClient({ slug }: { slug: string }) {
                 {isDigital ? (
                   <>
                     <button onClick={handleBuy} disabled={buying}
-                      className="flex w-full items-center justify-center gap-2 rounded-full bg-terracotta px-7 py-3 text-cream hover:bg-terracotta-dark disabled:opacity-60 transition-colors">
+                      className="flex w-full items-center justify-center gap-2 rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 disabled:opacity-60 transition-colors">
                       {buying ? "Redirecting to checkout…" : (
                         <><Lock className="h-4 w-4" /> Buy now — ${product.price.toFixed(2)}</>
                       )}
                     </button>
                     {!session?.user && (
-                      <p className="text-center text-xs text-charcoal/50">
-                        <Link href="/login" className="text-terracotta hover:underline">Sign in</Link> to purchase
+                      <p className="text-center text-xs text-white/40">
+                        <Link href="/login" className="text-red-500 hover:underline">Sign in</Link> to purchase
                       </p>
                     )}
                   </>
                 ) : (
                   <div className="flex items-center gap-4">
-                    <div className="inline-flex items-center rounded-full border border-border bg-card">
-                      <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-charcoal/70 hover:text-terracotta" aria-label="Decrease"><Minus className="h-4 w-4" /></button>
-                      <span className="w-8 text-center text-charcoal">{qty}</span>
-                      <button onClick={() => setQty((q) => q + 1)} className="p-3 text-charcoal/70 hover:text-terracotta" aria-label="Increase"><Plus className="h-4 w-4" /></button>
+                    <div className="inline-flex items-center rounded-full border border-white/15 bg-[#1A1A1A]">
+                      <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="p-3 text-white/50 hover:text-red-500" aria-label="Decrease">
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="w-8 text-center text-white">{qty}</span>
+                      <button onClick={() => setQty((q) => q + 1)} className="p-3 text-white/50 hover:text-red-500" aria-label="Increase">
+                        <Plus className="h-4 w-4" />
+                      </button>
                     </div>
-                    <button onClick={() => { add(product.id, qty); setAdded(true); setTimeout(() => setAdded(false), 1500); }}
-                      className="rounded-full bg-terracotta px-7 py-3 text-cream transition-colors hover:bg-terracotta-dark">
+                    <button
+                      onClick={() => { add(product.id, qty); setAdded(true); setTimeout(() => setAdded(false), 1500); }}
+                      className="rounded-full bg-red-600 px-7 py-3 text-white transition-colors hover:bg-red-500"
+                    >
                       {added ? "Added ✓" : "Add to cart"}
                     </button>
                   </div>
                 )}
-                {buyError && <p className="text-sm text-destructive">{buyError}</p>}
+                {buyError && <p className="text-sm text-red-400">{buyError}</p>}
               </div>
             )}
           </div>
@@ -229,11 +240,11 @@ export function ProductPageClient({ slug }: { slug: string }) {
         {/* Related */}
         {related.length > 0 && (
           <section className="mt-24">
-            <h2 className="mb-8 font-serif text-3xl text-deep-brown">You may also like</h2>
+            <h2 className="mb-8 font-serif text-3xl text-white">You may also like</h2>
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((r) => (
                 <Link key={r.id} href={`/product/${r.slug}`} className="group block">
-                  <div className="overflow-hidden rounded-2xl bg-[#f5ede6]">
+                  <div className="overflow-hidden rounded-2xl bg-[#1A1A1A]">
                     <Image
                       src={r.thumbnail ?? r.images[0] ?? PLACEHOLDER}
                       alt={r.title}
@@ -244,8 +255,8 @@ export function ProductPageClient({ slug }: { slug: string }) {
                       }`}
                     />
                   </div>
-                  <h3 className="mt-3 font-serif text-xl text-deep-brown">{r.title}</h3>
-                  <p className="text-sm text-charcoal/70">${r.price.toFixed(2)}</p>
+                  <h3 className="mt-3 font-serif text-xl text-white">{r.title}</h3>
+                  <p className="text-sm text-white/55">${r.price.toFixed(2)}</p>
                 </Link>
               ))}
             </div>

@@ -3,10 +3,10 @@ import { ShopPageClient } from "./ShopPageClient";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description: "Books, courses, and apparel from Pavulum.",
+  description: "Browse books, signed editions, eBooks, apparel, and future Pavulum merchandise — all created to support reflection, personal growth, and healthier relationships.",
   openGraph: {
     title: "Shop — Pavulum",
-    description: "Books, courses, and apparel from Pavulum.",
+    description: "Books, signed copies, eBooks, apparel, and more from Pav King.",
   },
   alternates: { canonical: "/shop" },
 };

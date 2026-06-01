@@ -34,9 +34,9 @@ export default async function BooksPage() {
 
         {/* ── HEADER ── */}
         <header className="mb-14 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">Books</p>
-          <h1 className="mt-3 font-serif text-5xl text-deep-brown">The library</h1>
-          <p className="mt-3 italic text-charcoal/70">Small books with long lives.</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-red-500">Books</p>
+          <h1 className="mt-3 font-serif text-5xl text-white">The library</h1>
+          <p className="mt-3 italic text-white/55">Small books with long lives.</p>
         </header>
 
         {/* ── BOOKS ── */}
@@ -54,31 +54,31 @@ export default async function BooksPage() {
         {questionnaires.length > 0 && (
           <section className="mt-20">
             <div className="mb-10 text-center">
-              <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">Self-reflection tools</p>
-              <h2 className="mt-3 font-serif text-4xl text-deep-brown">Questionnaires</h2>
-              <p className="mt-2 italic text-charcoal/60">Guided prompts to help you understand yourself better.</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-red-500">Self-reflection tools</p>
+              <h2 className="mt-3 font-serif text-4xl text-white">Questionnaires</h2>
+              <p className="mt-2 italic text-white/50">Guided prompts to help you understand yourself better.</p>
             </div>
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {questionnaires.map((q) => (
                 <Link
                   key={q.id}
                   href={q.comingSoon ? "/community" : `/product/${q.slug}`}
-                  className="group rounded-2xl border border-border bg-card p-7 transition-shadow hover:shadow-md"
+                  className="group rounded-2xl border border-white/10 bg-[#1A1A1A] p-7 transition-shadow hover:shadow-md"
                 >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
-                    <FileQuestion className="h-5 w-5 text-terracotta" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-600/20">
+                    <FileQuestion className="h-5 w-5 text-red-500" />
                   </div>
-                  <h3 className="mt-4 font-serif text-xl text-deep-brown">{q.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{q.description}</p>
+                  <h3 className="mt-4 font-serif text-xl text-white">{q.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{q.description}</p>
                   <div className="mt-5 flex items-center justify-between">
                     {q.comingSoon ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-xs text-charcoal/60">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-[#111111] px-3 py-1 text-xs text-white/50">
                         <Clock className="h-3 w-3" /> Coming soon
                       </span>
                     ) : (
-                      <span className="text-sm text-deep-brown font-medium">${q.price.toFixed(2)}</span>
+                      <span className="text-sm text-white font-medium">${q.price.toFixed(2)}</span>
                     )}
-                    <span className="text-xs text-terracotta group-hover:underline">
+                    <span className="text-xs text-red-500 group-hover:underline">
                       {q.comingSoon ? "Notify me →" : "Get it →"}
                     </span>
                   </div>
@@ -92,9 +92,9 @@ export default async function BooksPage() {
         {audiobooks.length > 0 && (
           <section className="mt-20">
             <div className="mb-10 text-center">
-              <p className="text-xs uppercase tracking-[0.2em] text-soft-gold">Listen</p>
-              <h2 className="mt-3 font-serif text-4xl text-deep-brown">Audiobooks</h2>
-              <p className="mt-2 italic text-charcoal/60">Read by the author. Made for the commute and the quiet hour.</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-red-500">Listen</p>
+              <h2 className="mt-3 font-serif text-4xl text-white">Audiobooks</h2>
+              <p className="mt-2 italic text-white/50">Read by the author. Made for the commute and the quiet hour.</p>
             </div>
             <div className="grid gap-8 sm:grid-cols-2">
               {audiobooks.map((ab) => {
@@ -103,9 +103,9 @@ export default async function BooksPage() {
                   <Link
                     key={ab.id}
                     href={ab.comingSoon ? "/community" : `/product/${ab.slug}`}
-                    className="group flex gap-6 overflow-hidden rounded-2xl bg-deep-brown p-6 transition-shadow hover:shadow-xl"
+                    className="group flex gap-6 overflow-hidden rounded-2xl bg-[#1A1A1A] border border-white/10 p-6 transition-shadow hover:shadow-xl hover:bg-[#222]"
                   >
-                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#f5ede6]">
+                    <div className="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-[#111111]">
                       <Image
                         src={img}
                         alt={ab.title}
@@ -117,22 +117,22 @@ export default async function BooksPage() {
                     <div className="flex flex-col justify-between">
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <Headphones className="h-3.5 w-3.5 text-soft-gold" />
-                          <p className="text-xs uppercase tracking-wider text-soft-gold">Audiobook</p>
+                          <Headphones className="h-3.5 w-3.5 text-red-500" />
+                          <p className="text-xs uppercase tracking-wider text-red-500">Audiobook</p>
                         </div>
-                        <h3 className="mt-1 font-serif text-xl text-cream">{ab.title}</h3>
-                        {ab.author && <p className="mt-0.5 text-sm italic text-cream/60">{ab.author}</p>}
-                        <p className="mt-2 text-sm text-cream/70 line-clamp-2">{ab.description}</p>
+                        <h3 className="mt-1 font-serif text-xl text-white">{ab.title}</h3>
+                        {ab.author && <p className="mt-0.5 text-sm italic text-white/55">{ab.author}</p>}
+                        <p className="mt-2 text-sm text-white/60 line-clamp-2">{ab.description}</p>
                       </div>
                       <div className="mt-3 flex items-center justify-between">
                         {ab.comingSoon ? (
-                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs text-cream/60">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs text-white/50">
                             <Clock className="h-3 w-3" /> Coming soon
                           </span>
                         ) : (
-                          <span className="text-sm text-soft-gold font-medium">${ab.price.toFixed(2)}</span>
+                          <span className="text-sm text-red-400 font-medium">${ab.price.toFixed(2)}</span>
                         )}
-                        <span className="text-xs text-cream/50 group-hover:text-cream transition-colors">
+                        <span className="text-xs text-white/40 group-hover:text-white transition-colors">
                           {ab.comingSoon ? "Notify me →" : "Listen →"}
                         </span>
                       </div>
@@ -151,7 +151,7 @@ export default async function BooksPage() {
 
 function EmptyState({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div className="rounded-2xl border border-dashed border-border py-16 text-center text-charcoal/50">
+    <div className="rounded-2xl border border-dashed border-white/15 py-16 text-center text-white/40">
       <div className="mx-auto mb-3 flex justify-center">{icon}</div>
       <p>{label}</p>
     </div>

@@ -44,23 +44,22 @@ export function ConfirmDialog({
       aria-modal="true"
       aria-labelledby="confirm-title"
     >
-      {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-deep-brown/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={onCancel}
       />
 
       {/* Panel */}
-      <div className="relative z-10 w-full max-w-sm rounded-2xl bg-card p-7 shadow-2xl">
+      <div className="relative z-10 w-full max-w-sm rounded-2xl bg-[#1A1A1A] border border-white/10 p-7 shadow-2xl">
         <div className="flex items-start gap-4">
           <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-            destructive ? "bg-destructive/10" : "bg-soft-gold/10"
+            destructive ? "bg-red-600/20" : "bg-red-600/20"
           }`}>
-            <AlertTriangle className={`h-5 w-5 ${destructive ? "text-destructive" : "text-soft-gold"}`} />
+            <AlertTriangle className={`h-5 w-5 ${destructive ? "text-red-500" : "text-red-400"}`} />
           </div>
           <div>
-            <h2 id="confirm-title" className="font-serif text-xl text-deep-brown">{title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{message}</p>
+            <h2 id="confirm-title" className="font-serif text-xl text-white">{title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/60">{message}</p>
           </div>
         </div>
 
@@ -68,7 +67,7 @@ export function ConfirmDialog({
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="rounded-full border border-border px-5 py-2 text-sm text-charcoal/80 hover:bg-secondary transition-colors"
+            className="rounded-full border border-white/15 px-5 py-2 text-sm text-white/70 hover:bg-white/10 transition-colors"
           >
             {cancelLabel}
           </button>
@@ -76,8 +75,8 @@ export function ConfirmDialog({
             onClick={onConfirm}
             className={`rounded-full px-5 py-2 text-sm text-white transition-colors ${
               destructive
-                ? "bg-destructive hover:bg-destructive/90"
-                : "bg-terracotta hover:bg-terracotta-dark"
+                ? "bg-red-700 hover:bg-red-600"
+                : "bg-red-600 hover:bg-red-500"
             }`}
           >
             {confirmLabel}

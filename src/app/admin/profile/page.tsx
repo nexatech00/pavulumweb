@@ -43,25 +43,25 @@ export default function AdminProfile() {
   };
 
   const input =
-    "w-full rounded-xl border border-border bg-card px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none";
+    "w-full rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none";
 
   return (
     <div className="max-w-lg">
-      <h1 className="font-serif text-4xl text-deep-brown">Edit profile</h1>
-      <p className="mt-1 text-charcoal/70">Update your login email and password.</p>
+      <h1 className="font-serif text-4xl text-white">Edit profile</h1>
+      <p className="mt-1 text-white/55">Update your login email and password.</p>
 
       <form onSubmit={submit} className="mt-8 space-y-5">
         <div>
-          <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">
-            Email <span className="text-terracotta">*</span>
+          <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">
+            Email <span className="text-red-500">*</span>
           </label>
           <input type="email" required value={newEmail} onChange={(e) => setNewEmail(e.target.value)} className={input} />
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">
+          <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">
             New password{" "}
-            <span className="normal-case text-charcoal/40">(leave blank to keep current)</span>
+            <span className="normal-case text-white/35">(leave blank to keep current)</span>
           </label>
           <PasswordInput
             value={newPassword}
@@ -72,11 +72,11 @@ export default function AdminProfile() {
           />
         </div>
 
-        <div className="border-t border-border pt-1" />
+        <div className="border-t border-white/10 pt-1" />
 
-        <div className="rounded-2xl bg-secondary/60 px-5 py-4">
-          <label className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">
-            Current password <span className="text-terracotta">*</span>
+        <div className="rounded-2xl bg-[#111111] border border-white/10 px-5 py-4">
+          <label className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">
+            Current password <span className="text-red-500">*</span>
           </label>
           <PasswordInput
             required
@@ -85,18 +85,18 @@ export default function AdminProfile() {
             placeholder="Required to confirm any changes"
             className={input}
           />
-          <p className="mt-2 text-xs text-charcoal/50">You must enter your current password to save changes.</p>
+          <p className="mt-2 text-xs text-white/35">You must enter your current password to save changes.</p>
         </div>
 
         {msg && (
-          <p className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm ${msg.ok ? "bg-green-50 text-green-700" : "bg-destructive/10 text-destructive"}`}>
+          <p className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm ${msg.ok ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"}`}>
             {msg.ok && <CheckCircle className="h-4 w-4" />}
             {msg.text}
           </p>
         )}
 
         <div className="flex items-center gap-3 pt-1">
-          <button type="submit" disabled={saving} className="rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark disabled:opacity-60 transition-colors">
+          <button type="submit" disabled={saving} className="rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors">
             {saving ? "Saving…" : "Save changes"}
           </button>
         </div>

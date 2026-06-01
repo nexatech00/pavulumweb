@@ -183,7 +183,7 @@ export function ProductForm({
     router.push("/admin/products");
   };
 
-  const input = "w-full rounded-xl border border-border bg-card px-4 py-2.5 text-charcoal focus:border-terracotta focus:outline-none";
+  const input = "w-full rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none";
 
   return (
     <form onSubmit={submit} className="max-w-3xl space-y-6">
@@ -262,13 +262,13 @@ export function ProductForm({
 
       {/* ── Flags ── */}
       <div className="flex flex-wrap gap-4">
-        <label className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-2.5 cursor-pointer">
+        <label className="flex items-center gap-3 rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-2.5 cursor-pointer">
           <input type="checkbox" checked={v.digital} onChange={(e) => set("digital", e.target.checked)} />
-          <span className="text-sm text-charcoal/80">Digital product</span>
+          <span className="text-sm text-white/70">Digital product</span>
         </label>
-        <label className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-2.5 cursor-pointer">
+        <label className="flex items-center gap-3 rounded-xl border border-white/15 bg-[#1A1A1A] px-4 py-2.5 cursor-pointer">
           <input type="checkbox" checked={v.comingSoon} onChange={(e) => set("comingSoon", e.target.checked)} />
-          <span className="text-sm text-charcoal/80">Coming soon <span className="text-charcoal/40">(optional)</span></span>
+          <span className="text-sm text-white/70">Coming soon <span className="text-white/35">(optional)</span></span>
         </label>
       </div>
 
@@ -331,10 +331,10 @@ export function ProductForm({
               accept={v.type === "AUDIOBOOK" ? "audio/*,.m4b,.mp3" : ".pdf,application/pdf"}
             />
             {v.fileUrl && (
-              <div className="flex items-center gap-2 rounded-xl border border-border bg-secondary/40 px-4 py-2.5 text-sm">
-                <Link2 className="h-4 w-4 text-terracotta shrink-0" />
-                <span className="truncate text-charcoal/70">{v.fileUrl}</span>
-                <button type="button" onClick={() => set("fileUrl", "")} className="ml-auto shrink-0 text-destructive hover:opacity-70"><X className="h-3.5 w-3.5" /></button>
+              <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-[#111111] px-4 py-2.5 text-sm">
+                <Link2 className="h-4 w-4 text-red-500 shrink-0" />
+                <span className="truncate text-white/60">{v.fileUrl}</span>
+                <button type="button" onClick={() => set("fileUrl", "")} className="ml-auto shrink-0 text-red-500 hover:opacity-70"><X className="h-3.5 w-3.5" /></button>
               </div>
             )}
             <input className={input} value={v.fileUrl} onChange={(e) => set("fileUrl", e.target.value)} placeholder="Or paste Cloudinary / S3 URL directly" />
@@ -350,8 +350,8 @@ export function ProductForm({
 
       {v.type === "COURSE" && (
         <Field label="Course chapters (JSON)">
-          <p className="mb-1.5 text-xs text-charcoal/50">
-            Format: <code className="rounded bg-secondary px-1">[{`{"title":"Intro","videoUrl":"...","duration":"10 min"}`}]</code>
+          <p className="mb-1.5 text-xs text-white/40">
+            Format: <code className="rounded bg-[#111111] px-1 text-white/60">[{`{"title":"Intro","videoUrl":"...","duration":"10 min"}`}]</code>
           </p>
           <textarea
             className={`${input} font-mono text-xs`}
@@ -366,10 +366,10 @@ export function ProductForm({
       {err && <p className="rounded-xl bg-destructive/10 px-4 py-2 text-sm text-destructive">{err}</p>}
 
       <div className="flex items-center gap-3 pt-2">
-        <button type="submit" disabled={saving || uploading !== null} className="rounded-full bg-terracotta px-6 py-2.5 text-sm text-cream hover:bg-terracotta-dark disabled:opacity-60 transition-colors">
+        <button type="submit" disabled={saving || uploading !== null} className="rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors">
           {saving ? "Saving…" : submitLabel}
         </button>
-        <Link href="/admin/products" className="rounded-full border border-border px-6 py-2.5 text-sm text-charcoal/80 hover:bg-secondary">
+        <Link href="/admin/products" className="rounded-full border border-white/15 px-6 py-2.5 text-sm text-white/60 hover:bg-white/10 transition-colors">
           Cancel
         </Link>
       </div>
