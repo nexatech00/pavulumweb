@@ -224,13 +224,13 @@ export function ProductForm({
                   setSlugLocked(false);
                   set("slug", toSlug(v.title));
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-charcoal/40 hover:text-terracotta transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-red-500 transition-colors"
               >
                 <Wand2 className="h-4 w-4" />
               </button>
             )}
           </div>
-          <p className="mt-1 text-xs text-charcoal/40">
+          <p className="mt-1 text-xs text-white/40">
             Auto-filled from title. Edit to customise, click <Wand2 className="inline h-3 w-3" /> to reset.
           </p>
         </Field>
@@ -384,9 +384,9 @@ function UploadButton({ label, loading, inputRef, onChange, accept, multiple }: 
   accept: string; multiple?: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-border bg-secondary/40 px-4 py-3 hover:border-terracotta transition-colors w-fit">
-      {loading ? <Loader2 className="h-4 w-4 animate-spin text-terracotta" /> : <Upload className="h-4 w-4 text-charcoal/50" />}
-      <span className="text-sm text-charcoal/60">{loading ? "Uploading…" : label}</span>
+    <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-white/15 bg-white/5 px-4 py-3 hover:border-red-500 transition-colors w-fit">
+      {loading ? <Loader2 className="h-4 w-4 animate-spin text-red-500" /> : <Upload className="h-4 w-4 text-white/40" />}
+      <span className="text-sm text-white/50">{loading ? "Uploading…" : label}</span>
       <input ref={inputRef} type="file" accept={accept} multiple={multiple} className="hidden" onChange={onChange} disabled={loading} />
     </label>
   );
@@ -395,8 +395,8 @@ function UploadButton({ label, loading, inputRef, onChange, accept, multiple }: 
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs uppercase tracking-wider text-charcoal/60">
-        {label}{required && <span className="text-terracotta"> *</span>}
+      <span className="mb-1.5 block text-xs uppercase tracking-wider text-white/50">
+        {label}{required && <span className="text-red-500"> *</span>}
       </span>
       {children}
     </label>

@@ -98,30 +98,30 @@ export function HomePageClient() {
     <SiteLayout>
 
       {/* ── HERO ── */}
-      <section className="relative min-h-[780px] h-[95vh] w-full overflow-hidden">
+      <section className="relative min-h-[100svh] w-full overflow-hidden sm:min-h-[780px] sm:h-[95vh]">
         <Image src={HERO} alt="" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/90" />
-        <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 pt-20 pb-28 text-center">
-          <p className="text-sm uppercase tracking-[0.35em] text-red-400 drop-shadow-md">Welcome to Pavulum</p>
-          <h1 className="mt-4 font-serif text-4xl tracking-wide text-white drop-shadow-lg sm:text-6xl md:text-7xl leading-tight">
+        <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 py-24 text-center">
+          <p className="text-xs uppercase tracking-[0.35em] text-red-400 drop-shadow-md sm:text-sm">Welcome to Pavulum</p>
+          <h1 className="mt-3 font-serif text-3xl tracking-wide text-white drop-shadow-lg sm:text-6xl md:text-7xl leading-tight">
             Intellectual food for the<br />
             <span className="text-red-500 drop-shadow-md">mind, heart, and spirit.</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-base text-white/85 drop-shadow sm:text-xl leading-relaxed">
+          <p className="mt-4 max-w-2xl text-sm text-white/85 drop-shadow sm:text-xl leading-relaxed">
             Through books, conversations, and courses, Pavulum explores love, relationships, parenting, personal growth, and the lessons that shape our lives.
           </p>
-          <p className="mt-3 max-w-2xl text-sm text-white/65 drop-shadow leading-relaxed sm:text-base">
+          <p className="mt-2 max-w-2xl text-xs text-white/65 drop-shadow leading-relaxed sm:text-base sm:mt-3">
             Our goal is simple: learn, love, laugh, and think more deeply about what matters.
           </p>
-          <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row">
-            <Link href="/projects" className="rounded-full bg-red-600 px-9 py-3.5 text-center text-white shadow-lg transition-colors hover:bg-red-500 font-medium">
+          <div className="mt-6 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-10 sm:w-auto sm:flex-row">
+            <Link href="/projects" className="rounded-full bg-red-600 px-9 py-3 text-center text-sm text-white shadow-lg transition-colors hover:bg-red-500 font-medium sm:py-3.5 sm:text-base">
               Explore the Books
             </Link>
-            <Link href="/community" className="rounded-full border border-white/60 px-9 py-3.5 text-center text-white transition-colors hover:bg-white/10">
+            <Link href="/community" className="rounded-full border border-white/60 px-9 py-3 text-center text-sm text-white transition-colors hover:bg-white/10 sm:py-3.5 sm:text-base">
               Join the Community
             </Link>
           </div>
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-white/30">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-1 text-white/30">
             <span className="text-xs tracking-widest uppercase">Scroll</span>
             <div className="h-8 w-px bg-white/20" />
           </div>

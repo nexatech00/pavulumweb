@@ -32,7 +32,15 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0C0C0C]/95 backdrop-blur">
       <div className="mx-auto flex h-28 max-w-6xl items-center justify-between px-5">
         <Link href="/" className="flex items-center">
-          <Image src="/logo.png" alt="Pavulum" width={280} height={110} className="h-24 w-auto object-contain" priority />
+          <Image
+            src="/logo.png"
+            alt="Pavulum"
+            width={280}
+            height={110}
+            className="h-24 w-auto object-contain"
+            style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.8)) brightness(1.08) contrast(1.1)" }}
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">

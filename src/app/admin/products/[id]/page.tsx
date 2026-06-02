@@ -13,13 +13,13 @@ export default function EditProduct({ params }: { params: Promise<{ id: string }
 
   return (
     <div>
-      <Link href="/admin/products" className="text-sm text-charcoal/60 hover:text-terracotta">
+      <Link href="/admin/products" className="text-sm text-white/50 hover:text-red-500">
         ← Back to products
       </Link>
-      <h1 className="mt-3 font-serif text-4xl text-deep-brown">Edit product</h1>
+      <h1 className="mt-3 font-serif text-4xl text-white">Edit product</h1>
 
-      {isLoading && <p className="mt-8 text-charcoal/60">Loading…</p>}
-      {!isLoading && !product && <p className="mt-8 text-charcoal/60">Not found.</p>}
+      {isLoading && <p className="mt-8 text-white/50">Loading…</p>}
+      {!isLoading && !product && <p className="mt-8 text-white/50">Not found.</p>}
       {product && (
         <div className="mt-8">
           <ProductForm

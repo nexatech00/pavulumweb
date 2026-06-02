@@ -25,10 +25,10 @@ export default function NewProduct() {
 
   return (
     <div>
-      <Link href="/admin/products" className="text-sm text-charcoal/60 hover:text-terracotta">
+      <Link href="/admin/products" className="text-sm text-white/50 hover:text-red-500">
         ← Back to products
       </Link>
-      <h1 className="mt-3 font-serif text-4xl text-deep-brown">
+      <h1 className="mt-3 font-serif text-4xl text-white">
         New {typeParam.charAt(0) + typeParam.slice(1).toLowerCase()}
       </h1>
       <div className="mt-8">

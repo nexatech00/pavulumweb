@@ -8,13 +8,14 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-16 md:grid-cols-4">
         <div>
           <Link href="/">
-            {/* Large size so the owl + PAVULUM napkin text are clearly visible */}
+            {/* drop-shadow + brightness/contrast so the Pavulum text is clearly visible on dark bg */}
             <Image
               src="/logo.png"
               alt="Pavulum"
               width={260}
               height={100}
               className="h-24 w-auto object-contain"
+              style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.8)) brightness(1.08) contrast(1.1)" }}
             />
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">

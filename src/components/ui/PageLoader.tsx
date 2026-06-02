@@ -1,86 +1,98 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 export function PageLoader() {
-  const [progress, setProgress] = useState(0);
-  const [fadeOut, setFadeOut] = useState(false);
+  const pathname = usePathname();
   const [visible, setVisible] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+  const [pulse, setPulse] = useState(false);
 
-  useEffect(() => {
-    let raf: number;
-    let current = 0;
-    let finished = false;
+  const show = useCallback(() => {
+    // Reset state and show the splash
+    setFadeOut(false);
+    setVisible(true);
+    setPulse(false);
 
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      cancelAnimationFrame(raf);
-      setProgress(100);
-      setTimeout(() => setFadeOut(true), 250);
-      setTimeout(() => setVisible(false), 650);
-    };
-
-    // Animate progress bar toward 85%
-    const tick = () => {
-      const step = current < 50 ? 4 : current < 75 ? 1.5 : 0.3;
-      current = Math.min(current + step, 85);
-      setProgress(current);
-      if (current < 85 && !finished) {
-        raf = requestAnimationFrame(tick);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-
-    // If page is already loaded (common with Next.js hydration), finish quickly
-    if (document.readyState === "complete") {
-      setTimeout(finish, 400);
-    } else {
-      window.addEventListener("load", () => setTimeout(finish, 200), { once: true });
-    }
-
-    // Hard fallback — always dismiss after 2.5s no matter what
-    const fallback = setTimeout(finish, 2500);
+    // Start pulse animation after a tiny delay
+    const t1 = setTimeout(() => setPulse(true), 50);
+    // Begin fade-out after 1.6s (total visible ~2s)
+    const t2 = setTimeout(() => setFadeOut(true), 1600);
+    // Fully unmount after fade completes
+    const t3 = setTimeout(() => setVisible(false), 2100);
 
     return () => {
-      cancelAnimationFrame(raf);
-      clearTimeout(fallback);
-      window.removeEventListener("load", finish);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
     };
   }, []);
+
+  // Show on initial mount
+  useEffect(() => {
+    const cleanup = show();
+    return cleanup;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Show on every route change
+  useEffect(() => {
+    const cleanup = show();
+    return cleanup;
+  }, [pathname, show]);
 
   if (!visible) return null;
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0C0C0C] transition-opacity duration-400 ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0C0C0C] transition-opacity duration-500 ${
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       }`}
     >
-      {/* Logo */}
+      {/* Owl logo — pulses twice over 2s */}
       <div
-        className={`transition-all duration-500 ${
-          fadeOut ? "scale-95 opacity-0" : "scale-100 opacity-100"
-        }`}
+        style={{
+          animation: pulse ? "owlPulse 0.9s ease-in-out 2" : "none",
+        }}
       >
         <Image
           src="/logo.png"
           alt="Pavulum"
-          width={200}
-          height={60}
-          className="h-16 w-auto object-contain"
+          width={220}
+          height={80}
+          className="h-20 w-auto object-contain"
+          style={{
+            filter:
+              "drop-shadow(0 0 18px rgba(192,57,43,0.55)) brightness(1.08) contrast(1.1)",
+          }}
           priority
         />
       </div>
 
-      {/* Progress bar pinned to bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-border/30">
+      {/* Red progress bar at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-white/10">
         <div
-          className="h-full bg-red-600 transition-all duration-150 ease-out"
-          style={{ width: `${progress}%` }}
+          className="h-full bg-red-600"
+          style={{
+            animation: pulse ? "loaderBar 1.6s ease-out forwards" : "none",
+          }}
         />
       </div>
+
+      <style>{`
+        @keyframes owlPulse {
+          0%   { transform: scale(1);    opacity: 1; }
+          40%  { transform: scale(1.08); opacity: 0.85; }
+          70%  { transform: scale(0.96); opacity: 1; }
+          100% { transform: scale(1);    opacity: 1; }
+        }
+        @keyframes loaderBar {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}</style>
     </div>
   );
 }

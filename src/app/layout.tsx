@@ -11,9 +11,12 @@ export const metadata: Metadata = {
   description:
     "Pavulum makes books, courses, apparel, and a podcast for parents, partners, and humans who want to live more thoughtfully.",
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    shortcut: [{ url: "/favicon.ico" }],
+    apple: [{ url: "/logo.png" }],
   },
   openGraph: {
     title: "Pavulum — Thoughts, books, and things for intentional living",
@@ -46,6 +49,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
