@@ -10,6 +10,9 @@ export function PageLoader() {
   const [fadeOut, setFadeOut] = useState(false);
   const [pulse, setPulse] = useState(false);
 
+  // Don't show the loader in the admin section at all
+  const isAdmin = pathname?.startsWith("/admin");
+
   const show = useCallback(() => {
     // Reset state and show the splash
     setFadeOut(false);
@@ -30,20 +33,22 @@ export function PageLoader() {
     };
   }, []);
 
-  // Show on initial mount
+  // Show on initial mount (non-admin only)
   useEffect(() => {
+    if (isAdmin) return;
     const cleanup = show();
     return cleanup;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Show on every route change
+  // Show on every route change (non-admin only)
   useEffect(() => {
+    if (isAdmin) return;
     const cleanup = show();
     return cleanup;
-  }, [pathname, show]);
+  }, [pathname, show, isAdmin]);
 
-  if (!visible) return null;
+  if (!visible || isAdmin) return null;
 
   return (
     <div
