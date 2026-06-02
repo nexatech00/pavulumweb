@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 
-
 const NAV = [
   {
     label: "Overview",
@@ -85,9 +84,9 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return (
-      <SiteLayout>
-        <div className="py-32 text-center text-white/40">Loading…</div>
-      </SiteLayout>
+      <div className="flex h-screen items-center justify-center bg-[#0C0C0C]">
+        <div className="text-white/40">Loading…</div>
+      </div>
     );
   }
 
@@ -99,13 +98,13 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
   const Sidebar = () => (
-    <aside className="flex h-full w-full flex-col bg-deep-brown text-cream">
+    <aside className="flex h-full w-full flex-col bg-[#111111] text-white">
       {/* Logo */}
       <div className="flex h-16 shrink-0 items-center gap-2 border-b border-white/10 px-6">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.png" alt="Pavulum" width={200} height={60} className="h-[60px] w-auto object-contain" />
         </Link>
-        <span className="rounded bg-terracotta px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-cream">
+        <span className="rounded bg-red-600 px-1.5 py-0.5 text-[10px] uppercase tracking-widest text-white">
           Admin
         </span>
       </div>
@@ -127,8 +126,8 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
                       href={href}
                       className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                         active
-                          ? "bg-terracotta text-cream shadow-sm"
-                          : "text-white/70 hover:bg-white/8 hover:text-cream"
+                          ? "bg-red-600 text-white shadow-sm"
+                          : "text-white/70 hover:bg-white/10 hover:text-white"
                       }`}
                     >
                       <Icon className="h-4 w-4 shrink-0" />
@@ -148,8 +147,8 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
           href="/admin/profile"
           className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
             isActive("/admin/profile")
-              ? "bg-terracotta text-cream shadow-sm"
-              : "text-white/70 hover:bg-white/8 hover:text-cream"
+              ? "bg-red-600 text-white shadow-sm"
+              : "text-white/70 hover:bg-white/10 hover:text-white"
           }`}
         >
           <UserCircle className="h-4 w-4 shrink-0" />
@@ -160,7 +159,7 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-screen overflow-hidden bg-[#0C0C0C]">
       {/* ── Desktop sidebar (20%) ── */}
       <div className="hidden w-[20%] min-w-[200px] max-w-[260px] shrink-0 lg:flex lg:flex-col">
         <Sidebar />
@@ -182,9 +181,9 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
       {/* ── Main area (80%) ── */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-6">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#111111] px-6">
           <button
-            className="lg:hidden text-charcoal/70 hover:text-terracotta"
+            className="lg:hidden text-white/50 hover:text-red-500"
             onClick={() => setSidebarOpen(true)}
             aria-label="Open menu"
           >
@@ -192,17 +191,17 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
           </button>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-4 text-sm">
-            <span className="hidden sm:inline text-charcoal/60">{user.email}</span>
+            <span className="hidden sm:inline text-white/50">{user.email}</span>
             <Link
               href="/"
-              className="flex items-center gap-1.5 text-charcoal/60 hover:text-terracotta transition-colors"
+              className="flex items-center gap-1.5 text-white/50 hover:text-red-500 transition-colors"
             >
               <ExternalLink className="h-4 w-4" />
               <span className="hidden sm:inline">View site</span>
             </Link>
             <button
               onClick={() => signOut()}
-              className="flex items-center gap-1.5 text-charcoal/60 hover:text-terracotta transition-colors"
+              className="flex items-center gap-1.5 text-white/50 hover:text-red-500 transition-colors"
             >
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Sign out</span>
@@ -211,7 +210,7 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto px-6 py-8 lg:px-10">
+        <main className="flex-1 overflow-y-auto bg-[#0C0C0C] px-6 py-8 lg:px-10">
           {children}
         </main>
       </div>

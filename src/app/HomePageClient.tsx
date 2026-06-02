@@ -98,22 +98,22 @@ export function HomePageClient() {
     <SiteLayout>
 
       {/* ── HERO ── */}
-      <section className="relative h-[95vh] min-h-[680px] w-full overflow-hidden">
+      <section className="relative min-h-[780px] h-[95vh] w-full overflow-hidden">
         <Image src={HERO} alt="" fill priority className="object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/90" />
-        <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 text-center">
+        <div className="relative z-10 mx-auto flex h-full max-w-4xl flex-col items-center justify-center px-6 pt-20 pb-28 text-center">
           <p className="text-sm uppercase tracking-[0.35em] text-red-400 drop-shadow-md">Welcome to Pavulum</p>
-          <h1 className="mt-4 font-serif text-5xl tracking-wide text-white drop-shadow-lg sm:text-6xl md:text-7xl leading-tight">
+          <h1 className="mt-4 font-serif text-4xl tracking-wide text-white drop-shadow-lg sm:text-6xl md:text-7xl leading-tight">
             Intellectual food for the<br />
             <span className="text-red-500 drop-shadow-md">mind, heart, and spirit.</span>
           </h1>
-          <p className="mt-6 max-w-2xl text-lg text-white/85 drop-shadow sm:text-xl leading-relaxed">
-            Pavulum is a place for reflection, growth, and honest conversations about life, love, family, parenting, and relationships.
+          <p className="mt-5 max-w-2xl text-base text-white/85 drop-shadow sm:text-xl leading-relaxed">
+            Through books, conversations, and courses, Pavulum explores love, relationships, parenting, personal growth, and the lessons that shape our lives.
           </p>
-          <p className="mt-3 max-w-2xl text-base text-white/65 drop-shadow leading-relaxed">
-            In a world filled with noise, division, and confusion, Pavulum encourages a return to common sense, compassion, patience, sincerity, personal responsibility, and the Golden Rule.
+          <p className="mt-3 max-w-2xl text-sm text-white/65 drop-shadow leading-relaxed sm:text-base">
+            Our goal is simple: learn, love, laugh, and think more deeply about what matters.
           </p>
-          <div className="mt-10 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row">
+          <div className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row">
             <Link href="/projects" className="rounded-full bg-red-600 px-9 py-3.5 text-center text-white shadow-lg transition-colors hover:bg-red-500 font-medium">
               Explore the Books
             </Link>
