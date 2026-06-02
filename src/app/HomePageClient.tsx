@@ -448,10 +448,20 @@ export function HomePageClient() {
           Just honest writing, sent on Sundays when the world is a little slower.
         </p>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            toast("You're subscribed! We'll be in touch on Sundays.", "success");
-            (e.target as HTMLFormElement).reset();
+            const fd = new FormData(e.currentTarget);
+            const res = await fetch("/api/newsletter", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: fd.get("email") }),
+            });
+            if (res.ok) {
+              toast("You're subscribed! Check your inbox for a welcome email.", "success");
+              (e.target as HTMLFormElement).reset();
+            } else {
+              toast("Something went wrong. Please try again.", "error");
+            }
           }}
           className="mt-8 flex flex-col gap-3 sm:flex-row"
         >

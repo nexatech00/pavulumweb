@@ -3,11 +3,58 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SiteLayout } from "@/components/site/Layout";
-import { Mail, MessageSquare, Mic2, Users, ArrowRight, CheckCircle, BookOpen, Megaphone, HandHeart, Bell } from "lucide-react";
+import { Mail, MessageSquare, Mic2, Users, ArrowRight, CheckCircle, BookOpen, Megaphone, HandHeart, Bell, Loader2 } from "lucide-react";
 
 export default function CommunityPage() {
   const [contactSent, setContactSent] = useState(false);
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactError, setContactError] = useState("");
+
   const [newsletterSent, setNewsletterSent] = useState(false);
+  const [newsletterLoading, setNewsletterLoading] = useState(false);
+  const [newsletterError, setNewsletterError] = useState("");
+
+  const handleContact = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setContactError("");
+    setContactLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: fd.get("name"),
+        email: fd.get("email"),
+        message: fd.get("message"),
+      }),
+    });
+    setContactLoading(false);
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      setContactError(j.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+    setContactSent(true);
+  };
+
+  const handleNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setNewsletterError("");
+    setNewsletterLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const res = await fetch("/api/newsletter", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: fd.get("email") }),
+    });
+    setNewsletterLoading(false);
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      setNewsletterError(j.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+    setNewsletterSent(true);
+  };
 
   return (
     <SiteLayout>
@@ -75,24 +122,27 @@ export default function CommunityPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => { e.preventDefault(); setNewsletterSent(true); }}
+                onSubmit={handleNewsletter}
                 className="mt-7 flex flex-col gap-3 sm:flex-row"
               >
                 <input
                   type="email"
+                  name="email"
                   required
                   placeholder="you@example.com"
                   className="flex-1 rounded-full border border-white/15 bg-[#1A1A1A] px-5 py-3 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 transition-colors"
+                  disabled={newsletterLoading}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 disabled:opacity-60 transition-colors"
                 >
-                  Subscribe
+                  {newsletterLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {newsletterLoading ? "Subscribing…" : "Subscribe"}
                 </button>
               </form>
             )}
-            <p className="mt-3 text-xs text-white/35">Unsubscribe anytime.</p>
+            {newsletterError && <p className="mt-2 text-sm text-red-400">{newsletterError}</p>}
           </div>
         </section>
 
@@ -122,7 +172,7 @@ export default function CommunityPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => { e.preventDefault(); setContactSent(true); }}
+                onSubmit={handleContact}
                 className="space-y-4"
               >
                 <Field name="name" label="Your name" required />
@@ -136,11 +186,14 @@ export default function CommunityPage() {
                     className="w-full rounded-xl border border-white/15 bg-[#0C0C0C] px-4 py-3 text-white placeholder:text-white/30 focus:border-red-600 focus:outline-none"
                   />
                 </label>
+                {contactError && <p className="text-sm text-red-400">{contactError}</p>}
                 <button
                   type="submit"
-                  className="rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 transition-colors"
+                  disabled={contactLoading}
+                  className="inline-flex items-center gap-2 rounded-full bg-red-600 px-7 py-3 text-white hover:bg-red-500 disabled:opacity-60 transition-colors"
                 >
-                  Send
+                  {contactLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {contactLoading ? "Sending…" : "Send"}
                 </button>
               </form>
             )}
