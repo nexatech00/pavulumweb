@@ -86,7 +86,7 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   if (status === "loading") {
     return (
       <SiteLayout>
-        <div className="py-32 text-center text-charcoal/60">Loading…</div>
+        <div className="py-32 text-center text-white/40">Loading…</div>
       </SiteLayout>
     );
   }
