@@ -1,25 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, BookOpen, BookMarked, FileText, Shirt, GraduationCap, Package } from "lucide-react";
+import { Clock } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useProducts, type Category } from "@/lib/products";
 
-const FILTERS: { label: string; value: Category | "all" }[] = [
-  { label: "All",     value: "all"     },
-  { label: "Books",   value: "books"   },
+const filters: { label: string; value: Category | "all" }[] = [
+  { label: "All", value: "all" },
+  { label: "Books", value: "books" },
   { label: "Courses", value: "courses" },
   { label: "Apparel", value: "apparel" },
-];
-
-const AVAILABLE_ITEMS = [
-  { icon: BookOpen,      label: "The Chop Game Paperback"        },
-  { icon: BookMarked,    label: "The Chop Game Signed Author Copy"},
-  { icon: FileText,      label: "eBooks"                         },
-  { icon: Shirt,         label: "Apparel"                        },
-  { icon: GraduationCap, label: "Future Courses"                 },
-  { icon: Package,       label: "Future Merchandise"             },
 ];
 
 export function ShopPageClient() {
@@ -27,12 +18,10 @@ export function ShopPageClient() {
   const [sort, setSort] = useState<"featured" | "low" | "high">("featured");
   const { data: products = [], isLoading } = useProducts();
 
-  // Only show live (non-coming-soon) products in the main grid
-  let list = cat === "all"
-    ? products.filter((p) => !p.comingSoon)
-    : products.filter((p) => p.category === cat && !p.comingSoon);
-
-  if (sort === "low")  list = [...list].sort((a, b) => a.price - b.price);
+  // Filter by category
+  let list = cat === "all" ? products : products.filter((p) => p.category === cat);
+  // Sort
+  if (sort === "low") list = [...list].sort((a, b) => a.price - b.price);
   if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
 
   return (
@@ -40,38 +29,22 @@ export function ShopPageClient() {
       <div className="mx-auto max-w-6xl px-6 py-16">
 
         {/* ── HEADER ── */}
-        <header className="mb-14 text-center">
+        <header className="mb-12 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-red-500">Shop</p>
           <h1 className="mt-3 font-serif text-5xl text-white">Shop</h1>
-
-          <p className="mt-5 text-white/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-5 text-white/65 max-w-2xl mx-auto leading-relaxed">
             Browse available books, signed editions, eBooks, apparel, and future Pavulum merchandise.
           </p>
-          <p className="mt-3 text-white/50 max-w-2xl mx-auto leading-relaxed text-sm">
+          <p className="mt-2 text-white/50 max-w-2xl mx-auto leading-relaxed text-sm">
             Every product is created to support the mission of encouraging reflection, meaningful
             conversation, personal growth, stronger families, and healthier relationships.
           </p>
-
-          {/* Available Products list */}
-          <div className="mt-10 inline-block text-left rounded-2xl border border-white/10 bg-[#1A1A1A] px-8 py-6">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/35 mb-4">
-              Available Products
-            </p>
-            <ul className="space-y-2.5">
-              {AVAILABLE_ITEMS.map(({ icon: Icon, label }) => (
-                <li key={label} className="flex items-center gap-3 text-sm text-white/65">
-                  <Icon className="h-4 w-4 shrink-0 text-red-500" />
-                  {label}
-                </li>
-              ))}
-            </ul>
-          </div>
         </header>
 
         {/* ── FILTERS ── */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-y border-white/10 py-4">
           <div className="flex flex-wrap gap-2">
-            {FILTERS.map((f) => (
+            {filters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setCat(f.value)}
@@ -117,9 +90,7 @@ export function ShopPageClient() {
           <div className="flex flex-col items-center justify-center gap-3 py-24 text-white/40">
             <Clock className="h-10 w-10 opacity-30" />
             <p className="text-lg">
-              {cat === "all"
-                ? "Products coming soon — check back shortly."
-                : `No ${cat} available yet.`}
+              {cat === "all" ? "No products yet — check back soon." : `No ${cat} available yet.`}
             </p>
           </div>
         )}
