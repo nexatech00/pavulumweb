@@ -158,9 +158,9 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0C0C0C]">
+    <div className="flex h-screen bg-[#0C0C0C]">
       {/* ── Desktop sidebar (20%) ── */}
-      <div className="hidden w-[20%] min-w-[200px] max-w-[260px] shrink-0 lg:flex lg:flex-col">
+      <div className="hidden w-[20%] min-w-[200px] max-w-[260px] shrink-0 lg:flex lg:flex-col overflow-hidden">
         <Sidebar />
       </div>
 

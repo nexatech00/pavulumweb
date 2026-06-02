@@ -29,8 +29,11 @@ export type Product = {
 
 // ── Client-side fetch helpers (relative URLs, browser only) ───────────────
 
-export async function fetchProducts(category?: Category): Promise<Product[]> {
-  const url = category ? `/api/products?category=${category}` : "/api/products";
+export async function fetchProducts(category?: Category, type?: ProductType): Promise<Product[]> {
+  const params = new URLSearchParams();
+  if (category) params.set("category", category);
+  if (type) params.set("type", type);
+  const url = params.toString() ? `/api/products?${params}` : "/api/products";
   const res = await fetch(url);
   if (!res.ok) throw new Error("Failed to fetch products");
   return res.json();
@@ -130,6 +133,10 @@ export function useProducts() {
 
 export function useProductsByCategory(cat: Category) {
   return useQuery({ queryKey: ["products", cat], queryFn: () => fetchProducts(cat) });
+}
+
+export function useProductsByType(type: ProductType) {
+  return useQuery({ queryKey: ["products-type", type], queryFn: () => fetchProducts(undefined, type) });
 }
 
 export function useProduct(slug: string) {

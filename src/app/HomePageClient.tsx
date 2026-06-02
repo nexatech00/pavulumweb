@@ -6,7 +6,7 @@ import { Play, ArrowRight, BookOpen, Headphones, Users, Quote, Star, Feather, He
 import { useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
-import { useProductsByCategory } from "@/lib/products";
+import { useProductsByCategory, useProductsByType } from "@/lib/products";
 import { useToast } from "@/components/ui/Toast";
 
 const HERO = "/hero.png";
@@ -85,7 +85,7 @@ const stats = [
 ];
 
 export function HomePageClient() {
-  const { data: books = [] } = useProductsByCategory("books");
+  const { data: books = [] } = useProductsByType("BOOK");
   const { data: episodesData = [] } = useLatestEpisode();
   const { data: essaysData = [] } = useLatestEssays();
   const { toast } = useToast();

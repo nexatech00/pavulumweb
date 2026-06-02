@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const category = searchParams.get("category");
   const slug = searchParams.get("slug");
+  const type = searchParams.get("type");
 
   if (slug) {
     const product = await prisma.product.findUnique({ where: { slug } });
@@ -14,7 +15,10 @@ export async function GET(req: NextRequest) {
   }
 
   const products = await prisma.product.findMany({
-    where: category ? { category: category as "books" | "courses" | "apparel" } : undefined,
+    where: {
+      ...(category ? { category: category as "books" | "courses" | "apparel" } : {}),
+      ...(type ? { type: type as import("@prisma/client").ProductType } : {}),
+    },
     orderBy: { createdAt: "asc" },
   });
   return NextResponse.json(products);

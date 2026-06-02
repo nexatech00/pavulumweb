@@ -1,48 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, BookOpen, Shirt, GraduationCap, Package } from "lucide-react";
+import { Clock, BookOpen, BookMarked, FileText, Shirt, GraduationCap, Package } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ProductCard } from "@/components/site/ProductCard";
 import { useProducts, type Category } from "@/lib/products";
 
-const filters: { label: string; value: Category | "all" }[] = [
-  { label: "All", value: "all" },
-  { label: "Books", value: "books" },
+const FILTERS: { label: string; value: Category | "all" }[] = [
+  { label: "All",     value: "all"     },
+  { label: "Books",   value: "books"   },
   { label: "Courses", value: "courses" },
   { label: "Apparel", value: "apparel" },
 ];
 
-// Static placeholder cards for products not yet in the DB
-const STATIC_COMING_SOON = [
-  {
-    key: "signed-copy",
-    icon: BookOpen,
-    title: "The Chop Game",
-    subtitle: "Signed Author Copy",
-    category: "books" as Category,
-  },
-  {
-    key: "apparel",
-    icon: Shirt,
-    title: "Pavulum Apparel",
-    subtitle: "Clothing & Accessories",
-    category: "apparel" as Category,
-  },
-  {
-    key: "courses",
-    icon: GraduationCap,
-    title: "Future Courses",
-    subtitle: "Online Learning",
-    category: "courses" as Category,
-  },
-  {
-    key: "merchandise",
-    icon: Package,
-    title: "Future Merchandise",
-    subtitle: "Coming Soon",
-    category: "apparel" as Category,
-  },
+const AVAILABLE_ITEMS = [
+  { icon: BookOpen,      label: "The Chop Game Paperback"        },
+  { icon: BookMarked,    label: "The Chop Game Signed Author Copy"},
+  { icon: FileText,      label: "eBooks"                         },
+  { icon: Shirt,         label: "Apparel"                        },
+  { icon: GraduationCap, label: "Future Courses"                 },
+  { icon: Package,       label: "Future Merchandise"             },
 ];
 
 export function ShopPageClient() {
@@ -50,39 +27,51 @@ export function ShopPageClient() {
   const [sort, setSort] = useState<"featured" | "low" | "high">("featured");
   const { data: products = [], isLoading } = useProducts();
 
-  // Live products from DB
-  let liveList = cat === "all" ? products : products.filter((p) => p.category === cat);
-  if (sort === "low") liveList = [...liveList].sort((a, b) => a.price - b.price);
-  if (sort === "high") liveList = [...liveList].sort((a, b) => b.price - a.price);
+  // Only show live (non-coming-soon) products in the main grid
+  let list = cat === "all"
+    ? products.filter((p) => !p.comingSoon)
+    : products.filter((p) => p.category === cat && !p.comingSoon);
 
-  // Static coming-soon cards filtered by category
-  const staticList = STATIC_COMING_SOON.filter(
-    (s) => cat === "all" || s.category === cat
-  );
-
-  const hasAnything = liveList.length > 0 || staticList.length > 0;
+  if (sort === "low")  list = [...list].sort((a, b) => a.price - b.price);
+  if (sort === "high") list = [...list].sort((a, b) => b.price - a.price);
 
   return (
     <SiteLayout>
       <div className="mx-auto max-w-6xl px-6 py-16">
 
         {/* ── HEADER ── */}
-        <header className="mb-12 text-center">
+        <header className="mb-14 text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-red-500">Shop</p>
           <h1 className="mt-3 font-serif text-5xl text-white">Shop</h1>
-          <p className="mt-5 text-white/65 max-w-2xl mx-auto leading-relaxed">
+
+          <p className="mt-5 text-white/70 max-w-2xl mx-auto leading-relaxed">
             Browse available books, signed editions, eBooks, apparel, and future Pavulum merchandise.
           </p>
-          <p className="mt-2 text-white/50 max-w-2xl mx-auto leading-relaxed text-sm">
+          <p className="mt-3 text-white/50 max-w-2xl mx-auto leading-relaxed text-sm">
             Every product is created to support the mission of encouraging reflection, meaningful
             conversation, personal growth, stronger families, and healthier relationships.
           </p>
+
+          {/* Available Products list */}
+          <div className="mt-10 inline-block text-left rounded-2xl border border-white/10 bg-[#1A1A1A] px-8 py-6">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/35 mb-4">
+              Available Products
+            </p>
+            <ul className="space-y-2.5">
+              {AVAILABLE_ITEMS.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex items-center gap-3 text-sm text-white/65">
+                  <Icon className="h-4 w-4 shrink-0 text-red-500" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </div>
         </header>
 
         {/* ── FILTERS ── */}
         <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-y border-white/10 py-4">
           <div className="flex flex-wrap gap-2">
-            {filters.map((f) => (
+            {FILTERS.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setCat(f.value)}
@@ -118,39 +107,21 @@ export function ShopPageClient() {
               </div>
             ))}
           </div>
-        ) : hasAnything ? (
+        ) : list.length > 0 ? (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Live DB products */}
-            {liveList.map((p) => (
+            {list.map((p) => (
               <ProductCard key={p.id} product={p} />
-            ))}
-
-            {/* Static coming-soon cards */}
-            {staticList.map(({ key, icon: Icon, title, subtitle }) => (
-              <div
-                key={key}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-dashed border-white/15 bg-[#1A1A1A]"
-              >
-                {/* Placeholder image area */}
-                <div className="flex aspect-[4/5] items-center justify-center bg-[#141414]">
-                  <div className="flex flex-col items-center gap-3 text-white/20">
-                    <Icon className="h-12 w-12" />
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1 text-xs">
-                      <Clock className="h-3 w-3" /> Coming soon
-                    </span>
-                  </div>
-                </div>
-                {/* Card info */}
-                <div className="p-4 space-y-1">
-                  <h3 className="font-serif text-xl text-white">{title}</h3>
-                  <p className="text-sm italic text-white/40">{subtitle}</p>
-                  <p className="pt-1 text-sm text-white/30">Available soon</p>
-                </div>
-              </div>
             ))}
           </div>
         ) : (
-          <p className="py-20 text-center text-white/40">Nothing here yet.</p>
+          <div className="flex flex-col items-center justify-center gap-3 py-24 text-white/40">
+            <Clock className="h-10 w-10 opacity-30" />
+            <p className="text-lg">
+              {cat === "all"
+                ? "Products coming soon — check back shortly."
+                : `No ${cat} available yet.`}
+            </p>
+          </div>
         )}
 
         {/* ── CLOSING ── */}
