@@ -14,7 +14,7 @@ const nav = [
   { href: "/projects", label: "Books" },
   { href: "/shop", label: "Shop" },
   { href: "/insights", label: "Podcast" },
-  { href: "/community", label: "Community" },
+  { href: "/community", label: "Get Involved" },
 ] as const;
 
 export function Header() {

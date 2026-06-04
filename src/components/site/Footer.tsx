@@ -36,15 +36,15 @@ export function Footer() {
           title="Listen & Read"
           links={[
             ["Podcast & Insights", "/insights"],
-            ["Community", "/community"],
+            ["Get Involved", "/community"],
           ]}
         />
         <FooterCol
           title="Connect"
           links={[
-            ["Contact & Community", "/community"],
+            ["Get Involved", "/community"],
             ["Newsletter", "/community#newsletter"],
-            ["Speaking", "/community#speaking"],
+            ["Speaking", "/community#podcast-guest"],
           ]}
         />
       </div>
