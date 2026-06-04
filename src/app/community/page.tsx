@@ -174,15 +174,15 @@ function SectionCard({
   );
 }
 
-function SubmitBtn({ loading, label }: { loading: boolean; label: string }) {
+function SubmitBtn({ loading }: { loading: boolean }) {
   return (
     <button
       type="submit" disabled={loading}
-      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-7 py-3 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors font-medium"
+      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-8 py-3 text-sm text-white hover:bg-red-500 disabled:opacity-60 transition-colors font-medium"
     >
       {loading
         ? <><Loader2 className="h-4 w-4 animate-spin" /> Sending…</>
-        : <>{label} <ArrowRight className="h-4 w-4" /></>}
+        : <>Submit <ArrowRight className="h-4 w-4" /></>}
     </button>
   );
 }
@@ -254,7 +254,7 @@ export default function CommunityPage() {
               <Field name="first-name" label="First Name" required />
               <Field name="email" label="Email Address" type="email" required />
               {error && <p className="text-sm text-red-400">{error}</p>}
-              <SubmitBtn loading={status === "loading"} label="Join the Newsletter" />
+              <SubmitBtn loading={status === "loading"} />
             </form>
           )}
         </SectionCard>
@@ -286,7 +286,7 @@ export default function CommunityPage() {
                 options={["Yes", "Maybe", "I'd prefer not to"]}
               />
               {error && <p className="text-sm text-red-400">{error}</p>}
-              <SubmitBtn loading={status === "loading"} label="Become an Advanced Reader" />
+              <SubmitBtn loading={status === "loading"} />
             </form>
           )}
         </SectionCard>
@@ -309,7 +309,7 @@ export default function CommunityPage() {
               <TextArea name="topic" label="What would you like to discuss?" required rows={3} placeholder="Share the topic or story you'd bring to the conversation..." />
               <TextArea name="why-good-guest" label="Why would you be a good guest for Pavulum?" required rows={3} placeholder="What makes your perspective valuable..." />
               {error && <p className="text-sm text-red-400">{error}</p>}
-              <SubmitBtn loading={status === "loading"} label="Apply as a Guest" />
+              <SubmitBtn loading={status === "loading"} />
             </form>
           )}
         </SectionCard>
@@ -336,7 +336,7 @@ export default function CommunityPage() {
               <TextArea name="about-yourself" label="Tell us about yourself" required rows={3} placeholder="Brief background, experience, passion..." />
               <TextArea name="skills" label="What skills would you like to contribute?" required rows={3} placeholder="What can you bring to the table?" />
               {error && <p className="text-sm text-red-400">{error}</p>}
-              <SubmitBtn loading={status === "loading"} label="Volunteer or Collaborate" />
+              <SubmitBtn loading={status === "loading"} />
             </form>
           )}
         </SectionCard>
@@ -357,7 +357,7 @@ export default function CommunityPage() {
               <TextArea name="topic-suggestion" label="Topic Suggestion" required rows={3} placeholder="What topic, question, or theme would you like to see explored?" />
               <TextArea name="additional-comments" label="Additional Comments" rows={3} placeholder="Any extra context or thoughts..." />
               {error && <p className="text-sm text-red-400">{error}</p>}
-              <SubmitBtn loading={status === "loading"} label="Share an Idea" />
+              <SubmitBtn loading={status === "loading"} />
             </form>
           )}
         </SectionCard>

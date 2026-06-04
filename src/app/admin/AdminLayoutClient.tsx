@@ -22,6 +22,7 @@ import {
   FileQuestion,
   Radio,
   PenLine,
+  Inbox,
 } from "lucide-react";
 
 const NAV = [
@@ -55,6 +56,7 @@ const NAV = [
     items: [
       { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
       { href: "/admin/users", label: "Users", icon: Users },
+      { href: "/admin/submissions", label: "Submissions", icon: Inbox },
     ],
   },
 ];

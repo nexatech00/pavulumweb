@@ -138,6 +138,18 @@ model Essay {
   updatedAt DateTime @updatedAt
 }
 
+// ── Community form submissions ────────────────────────────────────────────
+
+model Submission {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type      String   // "Newsletter Signup" | "Advanced Reader" | "Podcast Guest" | "Volunteer" | "Idea" | "Contact"
+  name      String
+  email     String
+  message   String   // Full form data as formatted text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
 // ── Enums ─────────────────────────────────────────────────────────────────
 
 enum Role {

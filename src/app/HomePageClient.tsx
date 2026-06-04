@@ -430,7 +430,7 @@ export function HomePageClient() {
           </p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Link href="/community" className="rounded-full bg-red-600 px-9 py-3.5 text-white hover:bg-red-500 transition-colors font-medium shadow-lg">
-              Join the Community
+            Join the Community
             </Link>
             <Link href="/about" className="rounded-full border border-white/30 px-9 py-3.5 text-white hover:bg-white/10 transition-colors">
               Learn more
