@@ -60,6 +60,7 @@ model User {
   accounts  Account[]
   sessions  Session[]
   purchases Purchase[]
+  orders    Order[]
 }
 
 // ── Products ──────────────────────────────────────────────────────────────
@@ -92,7 +93,7 @@ model Product {
   purchases Purchase[]
 }
 
-// ── Purchases ─────────────────────────────────────────────────────────────
+// ── Purchases (legacy, per-item digital access) ──────────────────────────
 
 model Purchase {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -108,7 +109,69 @@ model Purchase {
   createdAt DateTime @default(now())
 }
 
+// ── Orders (placed after successful Stripe payment) ───────────────────────
+
+model Order {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber   String      @unique   // e.g. "PAV-00042"
+  userId        String      @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id])
+
+  // Customer info snapshot at time of order
+  customerName  String
+  customerEmail String
+  phone         String?
+  address       String?
+  city          String?
+  state         String?
+  zip           String?
+  country       String?
+
+  // Payment
+  stripeSessionId String    @unique
+  amount          Float
+  currency        String    @default("usd")
+  status          String    @default("pending") // pending | paid | refunded | failed
+
+  // Items (snapshot of products ordered)
+  items         OrderItem[]
+
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId     String  @db.ObjectId
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String  @db.ObjectId
+  productTitle  String
+  productSlug   String
+  productImage  String?
+  price         Float
+  quantity      Int     @default(1)
+}
+
 // ── Editorial content ─────────────────────────────────────────────────────
+
+model Podcast {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String    @unique
+  title       String
+  description String
+  coverImage  String?
+  category    String    @default("General") // e.g. "Relationships", "Parenting", "Personal Growth"
+  spotifyUrl  String?
+  appleUrl    String?
+  youtubeUrl  String?
+  published   Boolean   @default(true)
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  episodes    Episode[]
+}
 
 model Episode {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -116,11 +179,16 @@ model Episode {
   title       String
   description String
   duration    String
+  coverImage  String?
+  price       Float    @default(0)
+  free        Boolean  @default(true)
   spotifyUrl  String?
   appleUrl    String?
   youtubeUrl  String?
   published   Boolean  @default(true)
   order       Int      @default(0)
+  podcastId   String?  @db.ObjectId
+  podcast     Podcast? @relation(fields: [podcastId], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

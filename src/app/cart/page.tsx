@@ -8,9 +8,6 @@ import { useCart } from "@/lib/cart";
 
 export default function CartPage() {
   const { detailed, setQty, remove, subtotal } = useCart();
-  const hasPhysical = detailed.some((l) => !l.product.digital);
-  const shipping = hasPhysical ? 6 : 0;
-  const total = subtotal + shipping;
 
   return (
     <SiteLayout>
@@ -92,12 +89,8 @@ export default function CartPage() {
               <h2 className="font-serif text-xl text-white">Order summary</h2>
               <dl className="mt-5 space-y-2 text-sm">
                 <Row label="Subtotal" value={`${subtotal.toFixed(2)}`} />
-                <Row
-                  label={hasPhysical ? "Shipping (est.)" : "Shipping"}
-                  value={hasPhysical ? `${shipping.toFixed(2)}` : "Free"}
-                />
                 <div className="my-3 h-px bg-white/10" />
-                <Row label="Total" value={`${total.toFixed(2)}`} bold />
+                <Row label="Total" value={`${subtotal.toFixed(2)}`} bold />
               </dl>
               <Link
                 href="/checkout"

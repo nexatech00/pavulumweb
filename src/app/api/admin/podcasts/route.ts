@@ -7,9 +7,11 @@ export async function GET() {
   if (!session || (session.user as { role?: string }).role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
-  const episodes = await prisma.episode.findMany({ orderBy: { order: "desc" } });
-  return NextResponse.json(episodes);
+  const podcasts = await prisma.podcast.findMany({
+    orderBy: { order: "asc" },
+    include: { episodes: { select: { id: true } } },
+  });
+  return NextResponse.json(podcasts);
 }
 
 export async function POST(req: Request) {
@@ -17,39 +19,28 @@ export async function POST(req: Request) {
   if (!session || (session.user as { role?: string }).role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
   const body = await req.json();
-  const { title, description, duration, coverImage, price, free, spotifyUrl, appleUrl, youtubeUrl, published, order, podcastId } = body;
-
-  if (!title || !description || !duration) {
-    return NextResponse.json({ error: "title, description and duration are required" }, { status: 400 });
+  const { title, description, coverImage, category, spotifyUrl, appleUrl, youtubeUrl, published, order } = body;
+  if (!title || !description) {
+    return NextResponse.json({ error: "title and description are required" }, { status: 400 });
   }
-
-  const baseSlug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-
+  const baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   let slug = baseSlug;
   let counter = 1;
-  while (await prisma.episode.findUnique({ where: { slug } })) {
+  while (await prisma.podcast.findUnique({ where: { slug } })) {
     slug = `${baseSlug}-${counter++}`;
   }
-
-  const episode = await prisma.episode.create({
+  const podcast = await prisma.podcast.create({
     data: {
-      slug, title, description, duration,
+      slug, title, description,
       coverImage: coverImage || null,
-      price: Number(price) || 0,
-      free: free ?? true,
+      category: category || "General",
       spotifyUrl: spotifyUrl || null,
       appleUrl: appleUrl || null,
       youtubeUrl: youtubeUrl || null,
       published: published ?? true,
       order: order ?? 0,
-      podcastId: podcastId || null,
     },
   });
-
-  return NextResponse.json(episode, { status: 201 });
+  return NextResponse.json(podcast, { status: 201 });
 }

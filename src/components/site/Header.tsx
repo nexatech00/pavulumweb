@@ -13,7 +13,7 @@ const nav = [
   { href: "/about", label: "About" },
   { href: "/projects", label: "Books" },
   { href: "/shop", label: "Shop" },
-  { href: "/insights", label: "Podcast" },
+  { href: "/podcast", label: "Podcast" },
   { href: "/community", label: "Get Involved" },
 ] as const;
 

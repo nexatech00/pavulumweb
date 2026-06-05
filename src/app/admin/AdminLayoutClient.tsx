@@ -20,7 +20,6 @@ import {
   UserCircle,
   Headphones,
   FileQuestion,
-  Radio,
   PenLine,
   Inbox,
 } from "lucide-react";
@@ -38,7 +37,6 @@ const NAV = [
       { href: "/admin/books", label: "Books", icon: BookOpen },
       { href: "/admin/courses", label: "Courses", icon: GraduationCap },
       { href: "/admin/apparel", label: "Apparel", icon: ShoppingBag },
-      { href: "/admin/podcast", label: "Podcast", icon: Mic2 },
       { href: "/admin/journal", label: "Journal", icon: NotebookPen },
       { href: "/admin/questionnaire", label: "Questionnaires", icon: FileQuestion },
       { href: "/admin/audiobook", label: "Audiobooks", icon: Headphones },
@@ -47,7 +45,7 @@ const NAV = [
   {
     label: "Content",
     items: [
-      { href: "/admin/episodes", label: "Episodes", icon: Radio },
+      { href: "/admin/episodes", label: "Podcast Episodes", icon: Mic2 },
       { href: "/admin/essays", label: "Essays", icon: PenLine },
     ],
   },

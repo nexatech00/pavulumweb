@@ -151,6 +151,28 @@ export function ProductForm({
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     setErr("");
+
+    // ── Validate required content fields per type ──────────────────────
+    if (
+      (v.type === "BOOK" || v.type === "JOURNAL" || v.type === "QUESTIONNAIRE" || v.type === "AUDIOBOOK") &&
+      !v.fileUrl.trim()
+    ) {
+      const label =
+        v.type === "AUDIOBOOK" ? "Audiobook file URL" :
+        v.type === "JOURNAL"   ? "Journal PDF" :
+        v.type === "QUESTIONNAIRE" ? "Questionnaire PDF" :
+        "Book / PDF file URL";
+      return setErr(`"${label}" is required for ${v.type.toLowerCase()} products. Upload a file or paste a URL.`);
+    }
+
+    if (v.type === "PODCAST" && !v.podcastUrl.trim()) {
+      return setErr(`"Podcast audio URL" is required for podcast products.`);
+    }
+
+    if (v.type === "COURSE" && !v.courseChapters.trim()) {
+      return setErr(`"Course chapters" is required for course products. Add at least one chapter.`);
+    }
+
     setSaving(true);
 
     let courseData: unknown = undefined;
@@ -159,7 +181,7 @@ export function ProductForm({
         courseData = { chapters: JSON.parse(v.courseChapters) };
       } catch {
         setSaving(false);
-        return setErr("Course chapters JSON is invalid.");
+        return setErr("Course chapters JSON is invalid. Check the format and try again.");
       }
     }
 
@@ -248,12 +270,14 @@ export function ProductForm({
             <option value="APPAREL">Apparel</option>
           </select>
         </Field>
-        <Field label="Category" required>
-          <select className={input} value={v.category} onChange={(e) => set("category", e.target.value as Category)}>
-            <option value="books">Books</option>
-            <option value="courses">Courses</option>
-            <option value="apparel">Apparel</option>
-          </select>
+        <Field label="Category">
+          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-[#111111] px-4 py-2.5">
+            <span className="text-sm text-white/70 capitalize">{v.category}</span>
+            <span className="ml-auto text-xs text-white/30 italic">auto-set from type</span>
+          </div>
+          <p className="mt-1 text-xs text-white/35">
+            Category is locked to match the product type and cannot be changed independently.
+          </p>
         </Field>
         <Field label="Price (USD)" required>
           <input className={input} type="number" step="0.01" min="0" required value={v.price} onChange={(e) => set("price", e.target.value)} />
@@ -316,15 +340,18 @@ export function ProductForm({
 
       {/* ── Type-specific content fields ── */}
       {(v.type === "BOOK" || v.type === "JOURNAL" || v.type === "QUESTIONNAIRE" || v.type === "AUDIOBOOK") && (
-        <Field label={
-          v.type === "JOURNAL" ? "Journal PDF URL" :
-          v.type === "QUESTIONNAIRE" ? "Questionnaire PDF URL" :
-          v.type === "AUDIOBOOK" ? "Audiobook file URL (MP3 / M4B)" :
-          "Book / PDF file URL"
-        }>
+        <Field
+          label={
+            v.type === "JOURNAL"       ? "Journal PDF" :
+            v.type === "QUESTIONNAIRE" ? "Questionnaire PDF" :
+            v.type === "AUDIOBOOK"     ? "Audiobook file (MP3 / M4B)" :
+            "Book / PDF file"
+          }
+          required
+        >
           <div className="space-y-2">
             <UploadButton
-              label={v.type === "AUDIOBOOK" ? "Upload audio file (Cloudinary)" : "Upload PDF (Cloudinary)"}
+              label={v.type === "AUDIOBOOK" ? "Upload audio file" : "Upload PDF"}
               loading={uploading === "file"}
               inputRef={fileRef}
               onChange={handleFile}
@@ -337,29 +364,54 @@ export function ProductForm({
                 <button type="button" onClick={() => set("fileUrl", "")} className="ml-auto shrink-0 text-red-500 hover:opacity-70"><X className="h-3.5 w-3.5" /></button>
               </div>
             )}
-            <input className={input} value={v.fileUrl} onChange={(e) => set("fileUrl", e.target.value)} placeholder="Or paste Cloudinary / S3 URL directly" />
+            <input
+              className={`${input} ${!v.fileUrl ? "border-red-600/40" : ""}`}
+              value={v.fileUrl}
+              onChange={(e) => set("fileUrl", e.target.value)}
+              placeholder="Or paste Cloudinary / S3 URL directly"
+            />
+            {!v.fileUrl && (
+              <p className="text-xs text-red-400/80">
+                ⚠ Required — users won't be able to access this product without a file URL.
+              </p>
+            )}
           </div>
         </Field>
       )}
 
       {v.type === "PODCAST" && (
-        <Field label="Podcast audio URL">
-          <input className={input} value={v.podcastUrl} onChange={(e) => set("podcastUrl", e.target.value)} placeholder="https://cdn.example.com/episode.mp3" />
+        <Field label="Podcast audio URL" required>
+          <input
+            className={`${input} ${!v.podcastUrl ? "border-red-600/40" : ""}`}
+            value={v.podcastUrl}
+            onChange={(e) => set("podcastUrl", e.target.value)}
+            placeholder="https://open.spotify.com/episode/… or https://cdn.example.com/ep.mp3"
+          />
+          {!v.podcastUrl && (
+            <p className="mt-1 text-xs text-red-400/80">
+              ⚠ Required — users need this URL to listen after purchase.
+            </p>
+          )}
         </Field>
       )}
 
       {v.type === "COURSE" && (
-        <Field label="Course chapters (JSON)">
+        <Field label="Course chapters (JSON)" required>
           <p className="mb-1.5 text-xs text-white/40">
             Format: <code className="rounded bg-[#111111] px-1 text-white/60">[{`{"title":"Intro","videoUrl":"...","duration":"10 min"}`}]</code>
           </p>
           <textarea
-            className={`${input} font-mono text-xs`}
+            className={`${input} font-mono text-xs ${!v.courseChapters.trim() ? "border-red-600/40" : ""}`}
             rows={8}
             value={v.courseChapters}
             onChange={(e) => set("courseChapters", e.target.value)}
             placeholder='[{"title": "Introduction", "videoUrl": "", "duration": "10 min"}]'
           />
+          {!v.courseChapters.trim() && (
+            <p className="mt-1 text-xs text-red-400/80">
+              ⚠ Required — add at least one chapter with a video URL.
+            </p>
+          )}
         </Field>
       )}
 

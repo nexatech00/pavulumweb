@@ -3,8 +3,7 @@ import Image from "next/image";
 import { Clock } from "lucide-react";
 import type { Product } from "@/lib/products";
 
-const PLACEHOLDER =
-  "https://images.unsplash.com/photo-1507842217343-583f20270319?auto=format&fit=crop&w=800&q=80";
+const PLACEHOLDER = "/logo.png";
 
 // Physical products (apparel) look better with cover; digital/books with contain
 const COVER_TYPES = new Set(["APPAREL"]);

@@ -7,29 +7,23 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (!session || (session.user as { role?: string }).role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
   const { id } = await params;
   const body = await req.json();
-
-  const episode = await prisma.episode.update({
+  const podcast = await prisma.podcast.update({
     where: { id },
     data: {
       title: body.title,
       description: body.description,
-      duration: body.duration,
       coverImage: body.coverImage || null,
-      price: Number(body.price) || 0,
-      free: body.free ?? true,
+      category: body.category || "General",
       spotifyUrl: body.spotifyUrl || null,
       appleUrl: body.appleUrl || null,
       youtubeUrl: body.youtubeUrl || null,
       published: body.published,
       order: body.order,
-      podcastId: body.podcastId || null,
     },
   });
-
-  return NextResponse.json(episode);
+  return NextResponse.json(podcast);
 }
 
 export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -37,8 +31,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
   if (!session || (session.user as { role?: string }).role !== "ADMIN") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-
   const { id } = await params;
-  await prisma.episode.delete({ where: { id } });
+  await prisma.podcast.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

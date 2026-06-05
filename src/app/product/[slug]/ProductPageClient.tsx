@@ -10,8 +10,7 @@ import { SiteLayout } from "@/components/site/Layout";
 import { useProduct, useProducts } from "@/lib/products";
 import { useCart } from "@/lib/cart";
 
-const PLACEHOLDER =
-  "https://images.unsplash.com/photo-1507842217343-583f20270319?auto=format&fit=crop&w=800&q=80";
+const PLACEHOLDER = "/logo.png";
 
 function usePurchased(productId: string | undefined) {
   const { data: session } = useSession();
@@ -172,24 +171,40 @@ export function ProductPageClient({ slug }: { slug: string }) {
               <div className="mt-8 space-y-3">
                 <div className="flex items-center gap-2 rounded-2xl bg-green-900/30 border border-green-700/40 px-5 py-3">
                   <CheckCircle className="h-5 w-5 text-green-400 shrink-0" />
-                  <span className="text-sm font-medium text-green-400">You own this — access it in your library.</span>
+                  <span className="text-sm font-medium text-green-400">You own this — access it below.</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {product.fileUrl && (
+                  {/* BOOK / JOURNAL / QUESTIONNAIRE → download PDF */}
+                  {(product.type === "BOOK" || product.type === "JOURNAL" || product.type === "QUESTIONNAIRE") && product.fileUrl && (
                     <a href={product.fileUrl} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
                       <Download className="h-4 w-4" /> Download
                     </a>
                   )}
+                  {/* AUDIOBOOK → stream / download audio */}
+                  {product.type === "AUDIOBOOK" && product.fileUrl && (
+                    <a href={product.fileUrl} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
+                      <Play className="h-4 w-4" /> Listen Now
+                    </a>
+                  )}
+                  {/* PODCAST episode → stream */}
+                  {product.type === "PODCAST" && product.podcastUrl && (
+                    <a href={product.podcastUrl} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
+                      <Play className="h-4 w-4" /> Listen to Episode
+                    </a>
+                  )}
+                  {/* COURSE → course player */}
                   {product.type === "COURSE" && (
                     <Link href={`/product/${product.slug}/learn`}
                       className="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-2.5 text-sm text-white hover:bg-red-500 transition-colors">
-                      <Play className="h-4 w-4" /> Start course
+                      <Play className="h-4 w-4" /> Start Course
                     </Link>
                   )}
                   <Link href="/dashboard"
                     className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-2.5 text-sm text-white/60 hover:bg-white/10 transition-colors">
-                    My library
+                    My Library
                   </Link>
                 </div>
               </div>
