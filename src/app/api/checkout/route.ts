@@ -43,8 +43,6 @@ export async function POST(req: NextRequest) {
         card: { request_three_d_secure: "automatic" },
       },
       currency: "usd",
-      // Disable adaptive pricing — always charge USD, no local currency conversion
-      currency_conversion: undefined,
       automatic_tax: { enabled: false },
       line_items: [
         {
@@ -133,8 +131,6 @@ export async function POST(req: NextRequest) {
         card: { request_three_d_secure: "automatic" },
       },
       currency: "usd",
-      // Disable adaptive pricing — always charge USD, no local currency conversion
-      currency_conversion: undefined,
       automatic_tax: { enabled: false },
       line_items,
       metadata: {
